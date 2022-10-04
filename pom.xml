@@ -1,0 +1,162 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>no.paneon.oas.plantuml</groupId>
+  <artifactId>pumloverlay</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>pumloverlay</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<version.java>11</version.java>
+	<java.version>11</java.version>
+	<maven.compiler.target>1.11</maven.compiler.target>
+	<maven.compiler.source>1.11</maven.compiler.source>
+	<git-commit-id-plugin.version>4.0.4</git-commit-id-plugin.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+
+	<!-- https://mvnrepository.com/artifact/org.antlr/antlr4 -->
+	<dependency>
+	    <groupId>org.antlr</groupId>
+	    <artifactId>antlr4</artifactId>
+	    <version>4.11.1</version>
+	</dependency>
+
+	<dependency>
+		<groupId>com.beust</groupId>
+		<artifactId>jcommander</artifactId>
+		<version>1.72</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+	<dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-api</artifactId>
+	    <version>2.17.1</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j -->
+	<dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-core</artifactId>
+	    <version>2.17.1</version>
+	</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		    <version>2.5.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+			<version>2.5.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+  </dependencies>
+
+  <build>
+    <resources>
+        <resource>
+            <directory>${basedir}/src/main/resources</directory>
+        </resource>
+        <resource>
+            <directory>${project.build.directory}/generated-sources/antlr4</directory>
+        </resource>
+    </resources> 
+	
+	<plugins>
+  		<plugin>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-maven-plugin</artifactId>
+            <version>4.11.1</version>
+            <executions>
+                <execution>
+	 	            <configuration>
+                        <sourceDirectory>${basedir}/src/main/java/no/paneon/oas/plantuml/g4</sourceDirectory>
+                        <outputDirectory>${project.build.directory}/generated-sources/antlr4/no/paneon/oas/plantuml/g4</outputDirectory>
+						 <arguments>
+						       <argument>-package</argument>
+						       <argument>no.paneon.oas.plantuml.g4</argument>
+						    </arguments>
+	     	        </configuration>
+                    <id>antlr</id>
+                    <goals>
+                        <goal>antlr4</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>3.8.0</version>
+			<configuration>
+				<source>11</source>
+				<target>11</target>
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+			<version>2.5.2</version>
+			<executions>
+				<execution>
+					<goals>
+						<goal>repackage</goal>
+					</goals>
+					<configuration>
+						<mainClass>no.paneon.oas.plantuml.pumloverlay.App</mainClass>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+
+ 		<plugin>
+	        <groupId>org.codehaus.mojo</groupId>
+	        <artifactId>build-helper-maven-plugin</artifactId>
+	        <version>3.3.0</version>
+	        <executions>
+	          <execution>
+	            <id>add-source</id>
+	            <phase>generate-sources</phase>
+	            <goals>
+	              <goal>add-source</goal>
+	            </goals>
+	            <configuration>
+	              <sources>
+	                <source>${project.build.directory}/generated-sources/antlr4</source>
+	              </sources>
+	            </configuration>
+	          </execution>
+	        </executions>
+	      </plugin>
+
+	</plugins>
+
+
+  </build>
+
+
+</project>

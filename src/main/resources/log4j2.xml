@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    
+  <Appenders>
+  
+    <Console name="Progress" target="SYSTEM_OUT">
+      <PatternLayout pattern="%m%n"/>
+      <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+    </Console>
+ 
+    <Console name="Logging" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} :: %msg%n"/>
+      <ThresholdFilter level="INFO" onMismatch="ACCEPT" onMatch="DENY"/>
+    </Console>
+    
+  </Appenders>
+  
+  <Loggers>
+  
+    <Root level="INFO">
+      <AppenderRef ref="Logging" />
+    </Root>
+         
+    <Logger name="no.paneon.oas.plantuml.pumloverlay.Out" level="INFO">
+      <AppenderRef ref="Progress" level="INFO" />
+    </Logger>
+          
+  </Loggers>
+</Configuration>
+

@@ -1,0 +1,282 @@
+@startuml
+'
+' Resource:  ServiceTestSpecification
+' Source:    TMF653-ServiceTest-v4.2.0.swagger.json
+'
+hide circle
+hide methods
+hide stereotype
+show <<Enumeration>> stereotype
+skinparam class {
+   BorderColor<<Extension>> red
+   FontColor<<Extension>> red
+   backgroundColor<<Enumeration>> #E6F5F7
+   backgroundColor<<Ref>> #FFFFE0
+   backgroundColor<<Pivot>> #FFFFFFF
+   backgroundColor<<Resource>> #FCF2E3
+   backgroundColor<<SubResource>> #FFFFFFF
+   backgroundColor<<SubResourceReference>> #FADADD
+}
+
+skinparam legend {
+   borderRoundCorner 0
+   borderColor red
+   backgroundColor white
+}
+
+class ServiceTestSpecification  <<Pivot>> {
+    <color:red>description : String
+    <color:red>href : Uri
+    <color:red>id : String
+    <color:red>isBundle : Boolean
+    <color:red>lastUpdate : DateTime
+    <color:red>lifecycleStatus : String
+    <color:red>name : String
+    <color:red>validFor : TimePeriod
+    <color:red>version : String
+    <color:red>@baseType : String
+    <color:red>@schemaLocation : Uri
+    <color:red>@type : String
+}
+
+class AssociationSpecificationRef  <<Ref>> {
+    <color:red>href : Uri
+    <color:red>{field}id : String (1)
+    name : String
+    @baseType : String
+    @referredType : String
+    <color:red>@schemaLocation : Uri
+    @type : String
+}
+
+class ServiceSpecificationRef  <<Ref>> {
+    <color:red>href : Uri
+    {field}id : String (1)
+    name : String
+    <color:red>version : String
+    <color:red>@baseType : String
+    @referredType : String
+    <color:red>@schemaLocation : Uri
+    <color:red>@type : String
+}
+
+class TargetEntitySchema <<Resource>> {
+    <color:red>{field}@schemaLocation : String (1)
+    <color:red>{field}@type : String (1)
+}
+
+class CharacteristicSpecificationRelationship <<Resource>> {
+    characteristicSpecificationId : String
+    name : String
+    parentSpecificationHref : Uri
+    parentSpecificationId : String
+    relationshipType : String
+    validFor : TimePeriod
+    @baseType : String
+    <color:red>@schemaLocation : Uri
+    @type : String
+}
+
+class MetricDefMeasureConsequence <<Resource>> {
+    description : String
+    name : String
+    prescribeAction : String
+    repeatAction : Boolean
+    validFor : TimePeriod
+    @baseType : String
+    <color:red>@schemaLocation : Uri
+    @type : String
+}
+
+class EntitySpecificationRelationship  <<Ref>> {
+    <color:red>href : Uri
+    <color:red>id : String
+    name : String
+    <color:red>{field}relationshipType : String (1)
+    role : String
+    validFor : TimePeriod
+    @baseType : String
+    <color:red>@referredType : String
+    <color:red>@schemaLocation : Uri
+    <color:red>@type : String
+}
+
+class TestMeasureDefinition <<Resource>> {
+    captureFrequency : String
+    captureMethod : String
+    capturePeriod : Duration
+    metricDescription : String
+    metricHref : String
+    metricName : String
+    name : String
+    unitOfMeasure : String
+    validFor : TimePeriod
+    valueType : String
+    <color:red>@baseType : String
+    <color:red>@schemaLocation : Uri
+    <color:red>@type : String
+}
+
+class RelatedParty  <<Ref>> {
+    <color:red>href : Uri
+    <color:red>{field}id : String (1)
+    name : String
+    role : String
+    @baseType : String
+    <color:red>{field}@referredType : String (1)
+    <color:red>@schemaLocation : Uri
+    @type : String
+}
+
+class ServiceTestSpecRelationship  <<Ref>> {
+    <color:red>href : Uri
+    id : String
+    name : String
+    <color:red>{field}relationshipType : String (1)
+    role : String
+    validFor : TimePeriod
+    @baseType : String
+    @referredType : String
+    <color:red>@schemaLocation : Uri
+    @type : String
+}
+
+class CharacteristicSpecification <<Resource>> {
+    <color:red>configurable : Boolean
+    <color:red>description : String
+    <color:red>extensible : Boolean
+    <color:red>id : String
+    <color:red>isUnique : Boolean
+    <color:red>maxCardinality : Integer
+    <color:red>minCardinality : Integer
+    <color:red>name : String
+    <color:red>regex : String
+    <color:red>validFor : TimePeriod
+    <color:red>valueType : String
+    <color:red>@baseType : String
+    <color:red>@schemaLocation : Uri
+    <color:red>@type : String
+    <color:red>@valueSchemaLocation : String
+}
+
+class AttachmentRefOrValue <<Resource>> {
+    <color:red>attachmentType : String
+    <color:red>content : Base64
+    <color:red>description : String
+    <color:red>href : Uri
+    <color:red>id : String
+    <color:red>mimeType : String
+    <color:red>name : String
+    <color:red>size : Quantity
+    <color:red>url : Uri
+    <color:red>validFor : TimePeriod
+    <color:red>@baseType : String
+    <color:red>@referredType : String
+    <color:red>@schemaLocation : Uri
+    <color:red>@type : String
+}
+
+class MetricDefMeasureThresholdRule <<Resource>> {
+    conformanceComparatorExact : Boolean
+    conformanceComparatorLower : String
+    conformanceComparatorUpper : String
+    conformanceTargetExact : String
+    conformanceTargetLower : String
+    conformanceTargetUpper : String
+    description : String
+    name : String
+    numberOfAllowedCrossing : Integer
+    thresholdRuleSeverity : String
+    tolerancePeriod : Duration
+    @baseType : String
+    <color:red>@schemaLocation : Uri
+    @type : String
+}
+
+class ConstraintRef  <<Ref>> {
+    <color:red>href : Uri
+    <color:red>{field}id : String (1)
+    name : String
+    version : String
+    @baseType : String
+    @referredType : String
+    <color:red>@schemaLocation : Uri
+    @type : String
+}
+
+class CharacteristicValueSpecification <<Resource>> {
+    isDefault : Boolean
+    rangeInterval : String
+    regex : String
+    unitOfMeasure : String
+    validFor : TimePeriod
+    value : Any
+    valueFrom : Integer
+    valueTo : Integer
+    valueType : String
+    @baseType : String
+    <color:red>@schemaLocation : Uri
+    @type : String
+}
+
+'sequence: 13
+'processing edges for ServiceTestSpecification
+ServiceTestSpecification *-->  "0..*" TestMeasureDefinition : testMeasureDefinition
+
+ServiceTestSpecification *-[#red]->  "0..*" EntitySpecificationRelationship : <color:red>entitySpecRelationship
+
+ServiceTestSpecification *-[#red]->  "0..*" CharacteristicSpecification : <color:red>specCharacteristic
+
+'sequence: 77
+'processing edges for TestMeasureDefinition
+TestMeasureDefinition *-->  "0..*" MetricDefMeasureThresholdRule : thresholdRule
+
+ServiceTestSpecification *-left[#red]-> "0..*" ServiceSpecificationRef : <color:red>relatedServiceSpecification
+
+ServiceTestSpecification *-right[#red]-> "0..1" TargetEntitySchema : <color:red>targetEntitySchema
+
+RelatedParty "0..*" <-[#red]-* ServiceTestSpecification : <color:red>relatedParty
+
+ServiceTestSpecRelationship "0..*" <--* ServiceTestSpecification : serviceTestSpecRelationship
+
+AttachmentRefOrValue "0..*" <-[#red]-* ServiceTestSpecification : <color:red>attachment
+
+ServiceTestSpecification *-[#red]->  "0..*" ConstraintRef : <color:red>constraint
+
+'sequence: 63
+'processing edges for EntitySpecificationRelationship
+'completed processing of edges for EntitySpecificationRelationship
+'processing edges for EntitySpecificationRelationship
+EntitySpecificationRelationship *-->  "0..1" AssociationSpecificationRef : associationSpec
+
+'sequence: 143
+'processing edges for MetricDefMeasureThresholdRule
+'completed processing of edges for MetricDefMeasureThresholdRule
+'processing edges for MetricDefMeasureThresholdRule
+MetricDefMeasureThresholdRule *-->  "0..*" MetricDefMeasureConsequence : consequence
+
+'sequence: 113
+'processing edges for CharacteristicSpecification
+'completed processing of edges for CharacteristicSpecification
+'processing edges for CharacteristicSpecification
+CharacteristicSpecification *-->  "0..*" CharacteristicSpecificationRelationship : charSpecRelationship
+
+CharacteristicSpecification *-->  "0..*" CharacteristicValueSpecification : characteristicValueSpecification
+
+
+
+
+skinparam legendBackgroundColor #transparent
+skinparam legendBorderColor #transparent
+
+legend
+   |= <size:10>Color </size>|= <size:10>Description </size>|
+   | <#FFFFFFF> | <size:10>Resource (entry point) </size>|
+   | <#FCF2E3> | <size:10>Sub-resource </size>|
+   | <#FFFFE0> | <size:10>Sub-resource (reference entity) </size>|
+   | <#red> | <size:10>removed </size>|
+ <size:10>(1) : Mandatory property</size>
+endlegend
+
+@enduml
+
