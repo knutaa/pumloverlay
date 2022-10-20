@@ -1,0 +1,279 @@
+@startuml
+'
+' Resource:  Quote
+' Source:    TMF648-Quote-v5.0.0.oas.yaml
+'
+hide circle
+hide methods
+hide stereotype
+show <<Enumeration>> stereotype
+skinparam class {
+   BorderColor<<Extension>> blue
+   FontColor<<Extension>> blue
+   backgroundColor<<Enumeration>> #E6F5F7
+   backgroundColor<<Ref>> #FFFFE0
+   backgroundColor<<Pivot>> #FFFFFFF
+   backgroundColor<<Resource>> #FCF2E3
+   backgroundColor<<SubResource>> #FFFFFFF
+   backgroundColor<<SubResourceReference>> #FADADD
+}
+
+skinparam legend {
+   borderRoundCorner 0
+   borderColor red
+   backgroundColor white
+}
+
+class Quote  <<Pivot>> {
+    category : String
+    {field}creationDate : DateTime (1)
+    description : String
+    {field}effectiveQuoteCompletionDate : DateTime (1)
+    expectedFulfillmentStartDate : DateTime
+    {field}expectedQuoteCompletionDate : DateTime (1)
+    {field}href : String (1)
+    {field}id : String (1)
+    {field}instantSyncQuote : Boolean (1)
+    requestedQuoteCompletionDate : DateTime
+    {field}state : QuoteStateType (1)
+    {field}validFor : TimePeriod (1)
+    version : String
+    @baseType : String
+    @schemaLocation : String
+    {field}@type : String (1)
+}
+
+class QuoteStateType <<Enumeration>> {
+    approved
+    declined
+    acknowledged
+    inProgress
+    rejected
+    pending
+    cancelled
+    accepted
+}
+
+class QuotePrice <<Resource>> {
+    description : String
+    name : String
+    priceType : String
+    recurringChargePeriod : String
+    unitOfMeasure : String
+    @baseType : String
+    @schemaLocation : String
+    @type : String
+}
+
+class ContactMedium <<Resource>> {
+    contactMediumIdentifier : String
+    contactType : String
+    preferred : Boolean
+    validFor : TimePeriod
+    @baseType : String
+    @schemaLocation : String
+    @type : String
+    --
+    discriminator:
+    PhoneContactMedium
+    ContactMedium
+    EmailContactMedium
+}
+
+class ExternalIdentifier <<Resource>> {
+    externalIdentifierType : String
+    id : String
+    owner : String
+    @baseType : String
+    @schemaLocation : String
+    @type : String
+}
+
+class BillingAccountRef  <<Ref>> {
+    href : String
+    id : String
+    name : String
+    ratingType : String
+    @baseType : String
+    @referredType : String
+    @schemaLocation : String
+    @type : String
+}
+
+class AgreementRef  <<Ref>> {
+    href : String
+    id : String
+    name : String
+    @baseType : String
+    @referredType : String
+    @schemaLocation : String
+    @type : String
+}
+
+class QuoteItem  <<SubResourceReference>> {
+    action : ItemActionType
+    appointment : AppointmentRef [0..*]
+    attachment : AttachmentRefOrValue [0..*]
+    {field}id : String (1)
+    note : Note [0..*]
+    product : ProductRefOrValue
+    productOffering : ProductOfferingRef
+    productOfferingQualificationItem : ProductOfferingQualificationItemRef
+    quantity : Integer
+    quoteItem : QuoteItem [1..*]
+    quoteItemAuthorization : Authorization [0..*]
+    quoteItemPrice : QuotePrice [0..*]
+    quoteItemRelationship : QuoteItemRelationship [0..*]
+    relatedParty : RelatedParty [0..*]
+    {field}state : QuoteStateType (1)
+    @baseType : String
+    @schemaLocation : String
+    @type : String
+}
+
+class EmailContactMedium <<Resource>> {
+    emailAddress : String
+    @type = EmailContactMedium
+}
+
+class ProductOfferingQualificationRef  <<Ref>> {
+    href : String
+    id : String
+    name : String
+    @baseType : String
+    @referredType : String
+    @schemaLocation : String
+    @type : String
+}
+
+class Authorization <<Resource>> {
+    givenDate : DateTime
+    name : String
+    requestedDate : DateTime
+    signatureRepresentation : String
+    state : String
+    @baseType : String
+    @schemaLocation : String
+    @type : String
+}
+
+class PriceAlteration <<Resource>> {
+    applicationDuration : Integer
+    description : String
+    name : String
+    {field}priceType : String (1)
+    priority : Integer
+    recurringChargePeriod : String
+    unitOfMeasure : String
+    @baseType : String
+    @schemaLocation : String
+    @type : String
+}
+
+class PhoneContactMedium <<Resource>> {
+    phoneNumber : String
+    @type = PhoneContactMedium
+}
+
+class ProductOfferingPriceRef  <<Ref>> {
+    href : String
+    id : String
+    name : String
+    @baseType : String
+    @referredType : String
+    @schemaLocation : String
+    @type : String
+}
+
+class Price <<Resource>> {
+    dutyFreeAmount : Money
+    percentage : Float
+    taxIncludedAmount : Money
+    taxRate : Float
+    @baseType : String
+    @schemaLocation : String
+    @type : String
+}
+
+class Note <<Resource>> {
+    author : String
+    date : DateTime
+    text : String
+    @baseType : String
+    @schemaLocation : String
+    @type : String
+}
+
+class RelatedParty  <<Ref>> {
+    href : String
+    id : String
+    name : String
+    {field}role : String (1)
+    @baseType : String
+    {field}@referredType : String (1)
+    @schemaLocation : String
+    @type : String
+}
+
+Quote *-right-> "1..*" QuoteItem : quoteItem
+
+Quote *-->  "0..*" RelatedParty : relatedParty
+
+Authorization *-left-> "0..*" RelatedParty : approver
+
+Quote *-->  "0..*" Authorization : authorization
+
+Quote -left[hidden]- QuoteStateType
+
+ContactMedium "0..*" <--* Quote : contactMedium
+
+Quote *-->  "0..*" QuotePrice : quoteTotalPrice
+
+QuotePrice *-->  "0..1" ProductOfferingPriceRef : productOfferingPrice
+
+PriceAlteration *-left-> "0..1" ProductOfferingPriceRef : productOfferingPrice
+
+QuotePrice *-->  "0..*" PriceAlteration : priceAlteration
+
+PriceAlteration *-right-> "1" Price : price
+
+ProductOfferingPriceRef -right[hidden]-> PriceAlteration
+
+QuotePrice *-->  "0..1" Price : price
+
+ContactMedium ..> PhoneContactMedium
+
+ContactMedium ..> EmailContactMedium
+
+ContactMedium <|-- PhoneContactMedium
+
+ContactMedium <|-- EmailContactMedium
+
+ExternalIdentifier "0..*" <--* Quote : externalId
+
+BillingAccountRef "0..*" <-[#blue]-* Quote : <color:blue>billingAccountTest
+
+Note "0..*" <--* Quote : note
+
+Quote *-->  "0..*" AgreementRef : agreement
+
+Quote *-->  "0..*" ProductOfferingQualificationRef : productOfferingQualification
+
+
+
+
+skinparam legendBackgroundColor #transparent
+skinparam legendBorderColor #transparent
+
+legend
+   |= <size:10>Color |= <size:10>Description |
+   | <#FFFFFFF> | <size:10>Resource (entry point) |
+   | <#FCF2E3> | <size:10>Sub-resource |
+   | <#FFFFE0> | <size:10>Sub-resource (reference entity) |
+   | <#FADADD> | <size:10>Sub-resource with details in separate diagram |
+   | <#E6F5F7> | <size:10>Enumeration |
+   | <#blue> | <size:10>Added |
+ <size:10>(1) : Mandatory property
+endlegend
+
+@enduml

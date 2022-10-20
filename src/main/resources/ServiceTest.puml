@@ -1,0 +1,168 @@
+@startuml
+'
+' Resource:  ServiceTest
+' Source:    TMF653-Service_Test_Management-v5.0.0.oas.yaml
+'
+hide circle
+hide methods
+hide stereotype
+show <<Enumeration>> stereotype
+skinparam class {
+   BorderColor<<Extension>> blue
+   FontColor<<Extension>> blue
+   backgroundColor<<Enumeration>> #E6F5F7
+   backgroundColor<<Ref>> #FFFFE0
+   backgroundColor<<Pivot>> #FFFFFFF
+   backgroundColor<<Resource>> #FCF2E3
+   backgroundColor<<SubResource>> #FFFFFFF
+   backgroundColor<<SubResourceReference>> #FADADD
+}
+
+skinparam legend {
+   borderRoundCorner 0
+   borderColor red
+   backgroundColor white
+}
+
+class ServiceTest <extends  \n<color:blue>Extensible \n<color:red>Addressable >  <<Pivot>> {
+    description : String
+    endDateTime : DateTime
+    <color:blue>{field}href : String (1)
+    {field}id : String (1)
+    mode : String
+    name : String
+    startDateTime : DateTime
+    <color:blue>state : ExecutionStateType
+    validFor : TimePeriod
+    @baseType : String
+    <color:blue>@schemaLocation : String
+    {field}@type : String (1)
+}
+
+class ExecutionStateType <<Enumeration>> {
+    acknowledged
+    inProgress
+    rejected
+    pending
+    cancelled
+    completed
+    failed
+}
+
+class MeasureThresholdRuleViolation <extends  \nExtensible > <<Resource>> {
+    conformanceComparatorExact : Boolean
+    conformanceComparatorLower : String
+    conformanceComparatorUpper : String
+    conformanceTargetExact : String
+    conformanceTargetLower : String
+    conformanceTargetUpper : String
+    description : String
+    name : String
+    numberOfAllowedCrossing : Integer
+    thresholdRuleSeverity : String
+    tolerancePeriod : Duration
+    @baseType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+class AppliedConsequence <extends  \nExtensible > <<Resource>> {
+    appliedAction : String
+    description : String
+    name : String
+    repeatAction : Boolean
+    @baseType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+class ServiceTestSpecificationRef <extends  \nReference > <<Resource>> {
+    {field}id : String (1)
+    <color:blue>name : String
+    @referredType : String
+}
+
+class CharacteristicRelationship <extends  \nExtensible > <<Resource>> {
+    id : String
+    relationshipType : String
+    @baseType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+class Characteristic <extends  \nExtensible > <<Resource>> {
+    id : String
+    {field}name : String (1)
+    valueType : String
+    @baseType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+class RelatedParty <extends  \nExtensible \nReference \nEntityRef >  <<Ref>> {
+    <color:blue>href : String
+    <color:blue>id : String
+    name : String
+    role : String
+    @baseType : String
+    <color:blue>@referredType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+class TestMeasure <extends  \nExtensible > <<Resource>> {
+    accuracy : Float
+    captureDateTime : DateTime
+    captureMethod : String
+    metricDescription : String
+    metricHref : String
+    metricName : String
+    unitOfMeasure : String
+    @baseType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+class ServiceRef <extends  \nReference > <<Resource>> {
+    {field}id : String (1)
+    name : String
+    @referredType : String
+}
+
+ServiceTest *-->  "0..*" TestMeasure : testMeasure
+
+TestMeasure *-right-> "0..1" Characteristic : value
+
+ServiceTest *-->  "0..*" Characteristic : characteristic
+
+ServiceTest -right[hidden]-> ExecutionStateType
+
+TestMeasure *-->  "0..*" MeasureThresholdRuleViolation : ruleViolation
+
+ServiceTest *-left-> "1" ServiceTestSpecificationRef : testSpecification
+
+RelatedParty "0..*" <--* ServiceTest : relatedParty
+
+ServiceRef "1" <--* ServiceTest : relatedService
+
+MeasureThresholdRuleViolation *-->  "0..*" AppliedConsequence : appliedConsequence
+
+Characteristic *-->  "0..*" CharacteristicRelationship : characteristicRelationship
+
+
+
+
+skinparam legendBackgroundColor #transparent
+skinparam legendBorderColor #transparent
+
+legend
+   |= <size:10>Color |= <size:10>Description |
+   | <#FFFFFFF> | <size:10>Resource (entry point) |
+   | <#FCF2E3> | <size:10>Sub-resource |
+   | <#FFFFE0> | <size:10>Sub-resource (reference entity) |
+   | <#E6F5F7> | <size:10>Enumeration |
+   | <#blue> | <size:10>added |
+ <size:10>(1) : Mandatory property
+endlegend
+
+@enduml

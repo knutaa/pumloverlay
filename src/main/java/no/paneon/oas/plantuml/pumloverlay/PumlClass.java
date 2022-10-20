@@ -2,6 +2,7 @@ package no.paneon.oas.plantuml.pumloverlay;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -20,21 +21,25 @@ public class PumlClass extends PumlFormat {
 	List<String> discriminators;
 	boolean blank;
 	
+	Map<String,String> decorations;
+	
 	PumlClass(String cls, List<String> content, List<String> stereotypes) {
 		this.name = cls;
 		this.content = content;
 		this.stereotypes = stereotypes;
 		this.discriminators = new LinkedList<>();
 		this.blank = false;
+		this.decorations = new HashMap<>();
 	}
 	
-	PumlClass(String cls, List<String> content, List<String> stereotypes, boolean blank) {
+	PumlClass(String cls, List<String> content, List<String> stereotypes, boolean blank, Map<String,String> decorations) {
 		this(cls,content,stereotypes);
 		this.blank = blank;
+		this.decorations.putAll(decorations);
 	}
 	
-	PumlClass(String cls, List<String> content, List<String> stereotypes, List<String> discriminators, boolean blank) {
-		this(cls,content,stereotypes,blank);
+	PumlClass(String cls, List<String> content, List<String> stereotypes, List<String> discriminators, boolean blank, Map<String,String> decorations) {
+		this(cls,content,stereotypes,blank,decorations);
 		this.discriminators.addAll(discriminators);
 	}
 	
@@ -45,6 +50,15 @@ public class PumlClass extends PumlFormat {
 		
 		s.append("class ").append(name); 
 		
+		if(!decorations.isEmpty()) {
+			s.append("<extends ");
+			decorations.entrySet().forEach(decoration -> {
+				s.append("\\n");
+				if(!decoration.getValue().isEmpty()) s.append(decoration.getValue());
+				s.append(decoration.getKey());
+			});
+			s.append(" >");
+		}
 		stereotypes.forEach(t -> {
 			s.append(" ").append(t);
 		});

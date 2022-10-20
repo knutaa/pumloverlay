@@ -38,6 +38,16 @@ public class Combine extends TestCase {
     	test("test-4.puml");
     }
     
+    public void test3()
+    {
+    	test("Resource_Quote.puml");
+    }
+    
+    public void test4()
+    {
+    	test("ServiceTest.puml");
+    }
+    
     public void test(String file)
     {
 
@@ -61,8 +71,11 @@ public class Combine extends TestCase {
 
 	        System.out.println(classListener.puml.toString());
 
+	        assert(true);
+	        
 		} catch(Exception ex) {
 			System.out.println("exception: " + ex);
+			assert(false);
 		}
 		
 	}

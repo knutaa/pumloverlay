@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -201,7 +202,16 @@ public class App
 				// Out.println("attributes: " + attributes);
 				// Out.println("partitions: " + partitions);
 				
+				Map<String,String> baseDecorations = base.classes.get(cls).decorations;
+				Map<String,String> decorations = overlay.classes.get(cls).decorations;
+			
+				decorations.entrySet().forEach(item -> {
+					if(!item.getValue().isEmpty() || !baseDecorations.containsKey(item.getKey())) baseDecorations.put(item.getKey(), item.getValue());
+				});
+				
 				base.classes.get(cls).content=attributes;
+				
+				
 				
 			}
 		}		
@@ -234,8 +244,11 @@ public class App
 	}
 	   
 	private PumlConnection getReverse(Puml base, String key) {
+		LOG.debug("getReverse: key={}", key);
 		String parts[] = key.split("-");
-		String reverseKey = parts[1] + "-" + parts[0] + "-" + parts[2];
+		if(parts.length<2) return null;
+		String reverseKey = parts[1] + "-" + parts[0] + "-";
+		if(parts.length>2) reverseKey = reverseKey + parts[2];
 		return base.connections.get(reverseKey);
 	}
 

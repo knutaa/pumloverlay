@@ -37,7 +37,7 @@ public class PumlListener extends PlantumlBaseListener {
         if(ctx.assignment()!=null) {
         	content.addAll( ctx.assignment().stream().map(PumlListener::getFullText).collect(Collectors.toList()) );  	
         }
-                
+                       
         List<String> stereotypes = ctx.stereotype().stream().map(StereotypeContext::getText).collect(Collectors.toList());
         
         content = content.stream()
@@ -46,12 +46,21 @@ public class PumlListener extends PlantumlBaseListener {
         
         boolean blank = ctx.blank()!=null && !ctx.blank().isEmpty();
         
+        Map<String,String> decorations = new HashMap<>();
+        if(ctx.decoration()!=null) {
+        	ctx.decoration().decorationItem().stream().forEach(item -> {
+        		String color = item.color()!=null ? getFullText(item.color()) : "";
+        		String label = getFullText(item.ident());
+        		decorations.put(label,color); 
+        	});
+        }
+ 
         if(ctx.discriminator()!=null) {
         	List<String> discriminators = ctx.discriminator().line().stream().map(PumlListener::getFullText).collect(Collectors.toList());
-        	puml.classes.put(cls, new PumlClass(cls,content,stereotypes,discriminators,blank));
+        	puml.classes.put(cls, new PumlClass(cls,content,stereotypes,discriminators,blank,decorations));
         	
         } else {
-        	puml.classes.put(cls, new PumlClass(cls,content,stereotypes,blank));
+        	puml.classes.put(cls, new PumlClass(cls,content,stereotypes,blank,decorations));
 
         }
         

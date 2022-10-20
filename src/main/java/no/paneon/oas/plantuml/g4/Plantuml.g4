@@ -4,7 +4,6 @@ uml:
     START
     statements*
 	END
-    // (NEWLINE)* EOF
     ; 
     
 statements
@@ -35,9 +34,7 @@ legend_statement:
 	;
 	
 class_declaration:
-    class_type ident stereotype* ( LPAR NEWLINE?
-    // (prefix attribute | prefix method | prefix assignment | NEWLINE)*
-    // (line cardinality? | NEWLINE)*
+    class_type ident decoration? stereotype* ( LPAR NEWLINE?
     (blank | attribute | assignment | NEWLINE)*
     (delimiter NEWLINE)?
 	discriminator?
@@ -46,9 +43,14 @@ class_declaration:
     
 delimiter: '--' ;
 
+decoration: '<extends' decorationItem+ '>'
+	;
+	
+decorationItem: '\\n' color? ident
+	;
+	
 cardinality: 
-	// '[' ~(']')* ']'
-	'[0..*]'
+	'[' NUMBER '..' (NUMBER|'*') ']'
 	;
 	
 discriminator:
@@ -61,7 +63,6 @@ assignment:
 	
 skinparam_declaration:
     'skinparam' type=('class' |'legend') LPAR NEWLINE?
-    // (prefix? ident stereotype? value postfix? | NEWLINE)*
     (line | NEWLINE)*
     RPAR
     |
@@ -105,19 +106,6 @@ connection_right:
     ('"' attrib=ident mult=multiplicity? '"')? instance=ident
     ;
 
-//connection:
-//    ident line
-//    ;
-    
-//connection:
-//    left=connection_left
-//    leftMultiplicity=multiplicity?
-//    CONNECTOR 
-//    rightMultiplicity=multiplicity?
-//    right=connection_right
-//    (':' property=ident)? // WAS (':' stereotype)?
-//    NEWLINE
-//    ;
 
 connection:
     left=connection_left
@@ -128,10 +116,6 @@ connection:
     (':' property_color=color? property=ident)? // WAS (':' stereotype)?
     NEWLINE
     ;
-
-//multiplicity: ('*'  | '0..1'   | '0..*'   | '1..*'   | '1'   | 
-//              '"*"' | '"0..1"' | '"0..*"' | '"1..*"' | '"1"' );
-
 
 multiplicity: QSTR ;
 
@@ -201,6 +185,7 @@ enum_declaration:
 
 CONNECTOR:
     '--'
+    | '-' DIR? HIDE? COLOR? '-'
     | '.' DIR? COLOR? '.'
     | '-' DIR? COLOR? '->'
     | '<-' DIR? COLOR? '-'
@@ -208,11 +193,7 @@ CONNECTOR:
     | '*-' DIR? COLOR? '-'
     | '-' DIR? COLOR? '-o'
     | 'o-' DIR? COLOR? '-'
-    | '<|-' DIR? COLOR? '-'
-    
-    | '<|--'
-    | '--|>'
-       
+    | '<|-' DIR? COLOR? '-'       
     | '-' DIR? COLOR? '-|>'
     | '.' DIR? COLOR? '.|>'
     | '<|.' DIR? COLOR? '.'
@@ -247,10 +228,14 @@ CONNECTOR:
 //    | '-left' HIDE? COLOR? '->'
 //    | '-right' HIDE COLOR? '-|>'
     
-    | '*-right' HIDE? COLOR? '->'
-    | '*-left' HIDE? COLOR? '->'
-    | '*-left' HIDE? COLOR? '->'
-    | '-right' HIDE COLOR? '-|>'
+//    | '*-right' HIDE? COLOR? '->'
+//    | '*-left' HIDE? COLOR? '->'
+//    | '*-left' HIDE? COLOR? '->'
+//    | '-right' HIDE COLOR? '-|>'
+    
+    | '*' DIR? HIDE? COLOR? '->'
+    | '-' DIR? HIDE? COLOR? '-|>'
+    
     | '.' DIR? COLOR? '.>' 
     
     | '<.' DIR? COLOR? '.' 
@@ -293,7 +278,7 @@ END: '@enduml' ;
 NEWPAGE : 'newpage' -> channel(HIDDEN)
     ;
 
-NEWLINE  :  ENDLINE ; // [\r\n]+; // '\r'? '\n'; // [\r\n];
+// NEWLINE  :  ENDLINE ; // [\r\n]+; // '\r'? '\n'; // [\r\n];
 
 IDENT : NONDIGIT ( DIGIT | NONDIGIT )*;
 NUMBER : ( DIGIT )+;
@@ -309,6 +294,8 @@ COMMENT :
     
 WS  : [ ]+ -> channel(HIDDEN); // toss out whitespace
    
+NEWLINE : ENDLINE ;
+
 //=========================================================
 // Fragments
 //=========================================================

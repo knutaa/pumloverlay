@@ -11,7 +11,8 @@ public class ErrorListener extends BaseErrorListener {
 			String msg, RecognitionException e ) {
 		
 		Out.println("issue: " + msg + " (line=" + line + " pos=" + charPositionInLine + ")");
-
+		throw new Error();
+		
 	}
 
 }
