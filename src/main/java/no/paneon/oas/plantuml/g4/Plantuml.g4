@@ -29,19 +29,29 @@ show_statement:
 
 legend_statement:
 	'legend'
-	('|' line | line | NEWLINE)*
+	legend_rows*
 	'endlegend'
 	;
 	
+legend_rows: 
+	pipe_and_cell* NEWLINE
+	;
+	
+pipe_and_cell:
+	(pipe legend_line? | legend_line)
+	;
+
 class_declaration:
     class_type ident decoration? stereotype* ( LPAR NEWLINE?
-    (blank | attribute | assignment | NEWLINE)*
+    (blank  | attribute | assignment | NEWLINE)* 
     (delimiter NEWLINE)?
-	discriminator?
+	discriminators?
     RPAR )?
     ;
     
 delimiter: '--' ;
+
+pipe: '|' ;
 
 decoration: '<extends' decorationItem+ '>'
 	;
@@ -53,8 +63,12 @@ cardinality:
 	'[' NUMBER '..' (NUMBER|'*') ']'
 	;
 	
-discriminator:
-    DISCRIMINATOR ( color? line | NEWLINE)*
+discriminators:
+    DISCRIMINATOR ( discriminator | NEWLINE)*
+	;
+	
+discriminator: 
+	color? line
 	;
 	
 assignment:
@@ -72,22 +86,33 @@ skinparam_declaration:
 attribute:
 	color?
 	attr_field?
+	start_sep=separator?
     visibility?
     modifiers?
     type_declaration?
     ':'?
+    enum_marker? 
     ident
     mandatory?
     cardinality?
+    end_sep=separator?
     ;
 
 mandatory: '(1)' ;
+ 
+enum_marker: 'ENUM' ;
  
 attr_field:
 	'{field}'
 	;
 	
+separator: '//' ;
+
 blank: '{field}//' '//' ;
+
+enum_field: 
+	'{field}//' ident '//'
+	;
 
 method:
     visibility?
@@ -255,6 +280,10 @@ line:
      ;
         
 
+legend_line:
+     ~( '|' | NEWLINE | DISCRIMINATOR | ENDLEGEND)+ 
+     ;
+       
 DIR : ('left' | 'right') ;
      
 HIDE : '[hidden]' ;

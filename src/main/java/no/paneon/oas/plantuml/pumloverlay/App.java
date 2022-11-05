@@ -195,10 +195,18 @@ public class App
 
 				List<String> attributes = mergeAttributes(basePartitions,partitions);
 				
-				attributes.sort(null);
-				
-				List<String> discriminators = mergeDiscriminators(basePartitions,partitions);
+				// Out.debug("attributes: before sort {}", attributes);
 
+				attributes = Sorter.sort(attributes);
+				
+				// Out.debug("attributes: after sort {}", attributes);
+
+				List<String> discriminators = mergeDiscriminators(base.classes.get(cls).discriminators,overlay.classes.get(cls).discriminators);
+
+				LOG.debug("mergeDiscriminators: {}", discriminators);
+
+				base.classes.get(cls).discriminators=discriminators;
+				
 				// Out.println("attributes: " + attributes);
 				// Out.println("partitions: " + partitions);
 				
@@ -237,6 +245,14 @@ public class App
 						baseConn.right_multiplicity = mergeMultiplicity(baseConn.right_multiplicity,newConn.left_multiplicity, newConn.right_multiplicity);
 					}		
 					
+					if(baseConn.connector.contains("[#") && newConn.connector.contains("[#")) {
+						baseConn.connector = baseConn.connector.replaceAll("\\[#[a-z]+\\]", "");
+					}
+					
+					if(!baseConn.property_color.isEmpty() && !newConn.property_color.isEmpty()) {
+						baseConn.property_color="";
+					}
+					
 					base.connections.put(key,baseConn);
 					
 				}
@@ -265,14 +281,11 @@ public class App
 		return res;	
 	}
 
-	private List<String> mergeDiscriminators(List<List<String>> basePartitions, List<List<String>> partitions) {
-    	List<String> res = new LinkedList<>();
+	private List<String> mergeDiscriminators(List<String> base, List<String> partitions) {    	
+    	LOG.debug("mergeDiscriminators: base={} partitions={}", base, partitions);
     	
-    	if(basePartitions.size()>1 && partitions.size()>1) {
-    		return mergeList(basePartitions.get(1),partitions.get(1));	
-    	}
+    	return mergeList(base,partitions);	
     	
-		return res;
 	}
 
 	private List<String> mergeAttributes(List<List<String>> basePartitions, List<List<String>> partitions) {

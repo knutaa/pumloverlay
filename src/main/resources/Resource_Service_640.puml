@@ -1,0 +1,340 @@
+@startuml
+'
+' Resource:  Service
+' Source:    TMF640-Service_Activation_and_Configuration-v5.0.0.oas.yaml
+'
+hide circle
+hide methods
+hide stereotype
+show <<Enumeration>> stereotype
+skinparam class {
+   BorderColor<<Extension>> blue
+   FontColor<<Extension>> blue
+   backgroundColor<<Enumeration>> #E6F5F7
+   backgroundColor<<Ref>> #FFFFE0
+   backgroundColor<<Pivot>> #FFFFFFF
+   backgroundColor<<Resource>> #FCF2E3
+   backgroundColor<<SubResource>> #FFFFFFF
+   backgroundColor<<SubResourceReference>> #FADADD
+}
+
+skinparam legend {
+   borderRoundCorner 0
+   borderColor red
+   backgroundColor white
+}
+
+class Service  <<Pivot>> {
+    category : String
+    description : String
+    endDate : DateTime
+    hasStarted : Boolean
+    {field}href : String (1)
+    {field}id : String (1)
+    isBundle : Boolean
+    isServiceEnabled : Boolean
+    isStateful : Boolean
+    {field}name : String (1)
+    serviceDate : String
+    serviceType : String
+    startDate : DateTime
+    startMode : String
+    {field}state : ServiceStateType (1)
+    @baseType : String
+    <color:blue>@schemaLocation : String
+    @type = Service
+}
+
+class ServiceStateType <<Enumeration>> {
+    inactive
+    reserved
+    active
+    feasibilityChecked
+    designed
+    terminated
+}
+
+class ServiceSpecificationRef  <<Ref>> {
+    <color:blue>href : String
+    {field}id : String (1)
+    name : String
+    version : String
+    @baseType : String
+    @referredType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+class Characteristic  <<SubResourceReference>> {
+    characteristicRelationship : CharacteristicRelationship [0..*]
+    id : String
+    <color:blue>name : String
+    valueType : String
+    @baseType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+    --
+    discriminator:
+    <color:blue>ObjectCharacteristic
+    <color:blue>NumberCharacteristic
+    <color:blue>BooleanArrayCharacteristic
+    <color:blue>Characteristic
+    <color:blue>NumberArrayCharacteristic
+    <color:blue>BooleanCharacteristic
+    <color:blue>ObjectArrayCharacteristic
+    <color:blue>IntegerCharacteristic
+    <color:blue>StringArrayCharacteristic
+    <color:blue>IntegerArrayCharacteristic
+    <color:blue>StringCharacteristic
+}
+
+class ServiceRefOrValue <<Resource>> {
+    {field}//                                        //
+    --
+    discriminator:
+    <color:blue>Service
+    <color:blue>ServiceRef
+}
+
+class GeographicSubAddressUnit <<Resource>> <<Extension>> {
+    subUnitNumber : String
+    subUnitType : String
+    @baseType : String
+    @schemaLocation : String
+    @type : String
+}
+
+class RelatedServiceOrderItem <<Resource>> {
+    itemAction : OrderItemActionType
+    {field}itemId : String (1)
+    role : String
+    serviceOrderHref : String
+    {field}serviceOrderId : String (1)
+    @referredType : String
+}
+
+class OrderItemActionType <<Enumeration>> {
+    add
+    modify
+    noChange
+    delete
+}
+
+class FeatureRelationship  <<Ref>> {
+    <color:blue>{field}href : String (1)
+    id : String
+    {field}name : String (1)
+    {field}relationshipType : ENUM String (1)
+{field} //                        excluded//
+{field} //                        includes//
+{field} //                        may include//
+{field} //                        requires//
+    validFor : TimePeriod
+    @baseType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+class PlaceRef  <<Ref>> {
+    <color:blue>href : String
+    <color:blue>id : String
+    name : String
+    @baseType : String
+    @referredType : String
+    <color:blue>@schemaLocation : String
+    @type = PlaceRef
+}
+
+class RelatedEntityRefOrValue <<Resource>> {
+    id : String
+    <color:blue>role : String
+    @referredType : String
+}
+
+class GeographicAddressValue <<Resource>> <<Extension>> {
+    city : String
+    country : String
+    locality : String
+    postcode : String
+    stateOrProvince : String
+    streetName : String
+    streetNr : String
+    streetNrLast : String
+    streetNrLastSuffix : String
+    streetNrSuffix : String
+    streetSuffix : String
+    streetType : String
+    @baseType : String
+    @schemaLocation : String
+    @type = GeographicAddressValue
+}
+
+class Feature <<Resource>> {
+    {field}id : String (1)
+    isBundle : Boolean
+    isEnabled : Boolean
+    <color:blue>name : String
+    @baseType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+class GeographicSubAddressValue <<Resource>> <<Extension>> {
+    buildingName : String
+    levelNumber : String
+    levelType : String
+    name : String
+    privateStreetName : String
+    privateStreetNumber : String
+    subAddressType : String
+    @baseType : String
+    @schemaLocation : String
+    @type : String
+}
+
+class Note <<Resource>> {
+    {field}author : String (1)
+    date : DateTime
+    {field}id : String (1)
+    {field}text : String (1)
+    @baseType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+class GeographicLocationValue <<Resource>> <<Extension>> {
+    bbox : Number [0..*]
+    @baseType : String
+    @schemaLocation : String
+    @type = GeographicLocationValue
+}
+
+class RelatedPlaceRefOrValue <<Resource>> {
+    {field}//                                        //
+    --
+    discriminator:
+    <color:blue>GeographicAddress
+    <color:blue>GeographicLocation
+    <color:blue>RelatedPlaceRefOrValue
+    <color:blue>PlaceRef
+}
+
+class RelatedParty  <<Ref>> {
+    <color:blue>href : String
+    {field}id : String (1)
+    name : String
+    role : String
+    @baseType : String
+    {field}@referredType : String (1)
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+class ResourceRef  <<Ref>> {
+    <color:blue>href : String
+    {field}id : String (1)
+    name : String
+    @baseType : String
+    @referredType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+class ServiceRelationship <<Resource>> {
+    {field}relationshipType : String (1)
+    @baseType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+class ServiceRef  <<Ref>> {
+    <color:blue>href : String
+    <color:blue>id : String
+    name : String
+    @baseType : String
+    @referredType : String
+    <color:blue>@schemaLocation : String
+    @type = ServiceRef
+}
+
+class ConstraintRef  <<Ref>> {
+    href : String
+    <color:blue>id : String
+    name : String
+    version : String
+    @baseType : String
+    @referredType : String
+    <color:blue>@schemaLocation : String
+    @type : String
+}
+
+Service *-->  "0..*" ServiceRefOrValue : supportingService
+
+Service <.. ServiceRefOrValue
+
+ServiceRelationship *-left-> "1" ServiceRefOrValue : service
+
+ServiceRelationship *-right[#blue]-> "0..*" Characteristic : <color:blue>serviceRelationshipCharacteristic
+
+Service *-->  "0..*" Characteristic : serviceCharacteristic
+
+Feature *-left[#blue]-> "<color:blue>0..*" Characteristic : <color:blue>featureCharacteristic
+
+ServiceRelationship -right[hidden]-> Characteristic
+
+Service *-->  "0..*" Feature : feature
+
+Service *-->  "0..*" ServiceRelationship : serviceRelationship
+
+Service -right[hidden]-> ServiceStateType
+
+Service *-->  "0..*" RelatedServiceOrderItem : serviceOrderItem
+
+Service *-->  "0..*" RelatedPlaceRefOrValue : place
+
+RelatedServiceOrderItem -right[hidden]-> OrderItemActionType
+
+RelatedPlaceRefOrValue ..> GeographicAddressValue
+
+GeographicAddressValue *-[#blue]->  "0..1" GeographicSubAddressValue : <color:blue>geographicSubAddress
+
+Service *-left-> "0..1" ServiceSpecificationRef : serviceSpecification
+
+Note "0..*" <--* Service : note
+
+RelatedParty "0..*" <--* Service : relatedParty
+
+ResourceRef "0..*" <--* Service : supportingResource
+
+RelatedEntityRefOrValue "0..*" <--* Service : relatedEntity
+
+GeographicSubAddressValue *-[#blue]->  "0..*" GeographicSubAddressUnit : <color:blue>subUnit
+
+Feature *-right-> "0..*" FeatureRelationship : featureRelationship
+
+Feature *-->  "0..*" ConstraintRef : constraint
+
+RelatedPlaceRefOrValue ..> GeographicLocationValue
+
+RelatedPlaceRefOrValue ..> PlaceRef
+
+ServiceRefOrValue ..> ServiceRef
+
+
+
+
+skinparam legendBackgroundColor #transparent
+skinparam legendBorderColor #transparent
+
+legend
+   |= <size:10>Color |= <size:10>Description |
+   | <#FFFFFFF> | <size:10>Resource (entry point) |
+   | <#FCF2E3> | <size:10>Sub-resource |
+   | <#FFFFE0> | <size:10>Sub-resource (reference entity) |
+   | <#FADADD> | <size:10>Sub-resource with details in separate diagram |
+   | <#E6F5F7> | <size:10>Enumeration |
+   | <#blue> | <size:10>added |
+ <size:10>(1) : Mandatory property
+endlegend
+
+@enduml

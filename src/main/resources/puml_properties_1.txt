@@ -1,0 +1,39 @@
+   category : String
+   description : String
+   endDate : DateTime
+   hasStarted : Boolean
+   <color:red>href : String
+   <color:red>id : String
+   isBundle : Boolean
+   isServiceEnabled : Boolean
+   isStateful : Boolean
+   <color:red>name : String
+   serviceDate : String
+   serviceType : String
+   startDate : DateTime
+   startMode : String
+   <color:red>state : ServiceStateType
+   @baseType : String
+   {field}relationshipType : ENUM String (1)
+   {field} //                        excluded//
+   {field} //                        includes//
+   {field} //                        may include//
+   {field} //                        requires//
+   <color:red>@schemaLocation : Uri
+   <color:red>@type : String
+   {field}href : String (1)
+   {field}id : String (1)
+   {field}name : String (1)
+   {field}state : ServiceStateType (1)
+   <color:blue>@schemaLocation : String
+   {field}@type : String (1)
+   id : String
+   <color:red>{field}name : String (1)
+   <color:red>{field}value : Any (1)
+   valueType : String
+   @baseType : String
+   <color:red>@schemaLocation : Uri
+   @type : String
+   characteristicRelationship : CharacteristicRelationship [0..*]
+   <color:blue>name : String
+   <color:blue>@schemaLocation : String

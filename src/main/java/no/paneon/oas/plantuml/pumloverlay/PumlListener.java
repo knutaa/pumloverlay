@@ -44,7 +44,14 @@ public class PumlListener extends PlantumlBaseListener {
 					.filter(s -> !s.endsWith("--"))
 					.collect(Collectors.toList());
         
+        LOG.debug("enterClass: content={}", content);
+        
         boolean blank = ctx.blank()!=null && !ctx.blank().isEmpty();
+ 
+//        if(ctx.enum_field()!=null && !ctx.enum_field().isEmpty()) {
+//        	ctx.enum_field().forEach(e -> Out.debug("enum_field: {}" + getFullText(e)) );
+//            System.out.println("class: " + ctx.enum_field());
+//        }
         
         Map<String,String> decorations = new HashMap<>();
         if(ctx.decoration()!=null) {
@@ -55,9 +62,19 @@ public class PumlListener extends PlantumlBaseListener {
         	});
         }
  
-        if(ctx.discriminator()!=null) {
-        	List<String> discriminators = ctx.discriminator().line().stream().map(PumlListener::getFullText).collect(Collectors.toList());
-        	puml.classes.put(cls, new PumlClass(cls,content,stereotypes,discriminators,blank,decorations));
+        if(ctx.discriminators()!=null && ctx.discriminators().discriminator()!=null) {
+        	List<String> discriminators = ctx.discriminators().discriminator().stream().map(disc -> {
+        		
+        		String color = getFullText(disc.color());
+        		String label = getFullText(disc.line());
+
+        		return color + label;
+        		
+        	}).collect(Collectors.toList());
+        	
+        	LOG.debug("discriminator: {}",  discriminators);
+        	
+        	puml.classes.put(cls, new PumlClass(cls,content,stereotypes,discriminators,blank,decorations) );
         	
         } else {
         	puml.classes.put(cls, new PumlClass(cls,content,stereotypes,blank,decorations));
@@ -144,15 +161,55 @@ public class PumlListener extends PlantumlBaseListener {
     
     @Override
     public void enterLegend_statement(PlantumlParser.Legend_statementContext ctx) {
-        puml.legend.addAll( ctx.line().stream().map(PumlListener::getFullText).collect(Collectors.toList()) );
+
+    	StringBuilder legend = new StringBuilder();
+
+    	puml.legend.addAll(
+    		ctx.legend_rows().stream().map(row -> {
+	        	StringBuilder res = new StringBuilder();
+	    		row.pipe_and_cell().stream().forEach(cell -> {
+	    			boolean pipe = cell.pipe()!=null && !cell.pipe().isEmpty();
+	    			String content = getFullText(cell.legend_line());
+	    			if(pipe) res.append("|");
+	    			if(!content.isEmpty() && !content.startsWith("=")) res.append(" ");
+	    			res.append(content);
+	    			if(!content.isEmpty()) res.append(" ");
+	    		});
+	    		return res.toString();
+	    	}).collect(Collectors.toList())
+    	);
+    	
+    	
+//    	puml.legend.addAll( ctx.legend_rows().stream().map(row -> {
+//        	StringBuilder res = new StringBuilder();
+//        	row.legend_line().stream().map(col -> {
+//        		row.pipe().
+//        	})
+//        	
+//    		if(line.pipe()!=null) res.append(getFullText(line.pipe()));
+//    		if(line.legend_line()!=null) res.append(getFullText(line.legend_line()));
+//    		return res.toString();
+//    	}).collect(Collectors.toList()));
+    			
+//    	puml.legend.addAll( ctx.legend_line().stream().map(line -> {
+//        	StringBuilder res = new StringBuilder();
+//        	if(line.p)
+//        } )
+//      .collect(Collectors.toList()) );
         
     }
     
     private static String getFullText(ParserRuleContext context) {
+    	String res="";
+    	if(context==null) return res;
+    	
         if (context.start == null || context.stop == null || context.start.getStartIndex() < 0 || context.stop.getStopIndex() < 0)
-            return context.getText();
-
-        return context.start.getInputStream().getText(Interval.of(context.start.getStartIndex(), context.stop.getStopIndex()));
+            res = context.getText();
+        else
+        	res = context.start.getInputStream().getText(Interval.of(context.start.getStartIndex(), context.stop.getStopIndex()));
+        
+        return res.replace("\n", "");
+        
     }
 
     

@@ -30,6 +30,9 @@ public class PumlClass extends PumlFormat {
 		this.discriminators = new LinkedList<>();
 		this.blank = false;
 		this.decorations = new HashMap<>();
+		
+        LOG.debug("PumlClass: content={}", content);
+
 	}
 	
 	PumlClass(String cls, List<String> content, List<String> stereotypes, boolean blank, Map<String,String> decorations) {
@@ -91,22 +94,25 @@ public class PumlClass extends PumlFormat {
 
 	private List<String> sort(List<String> content) {
 		List<String> res=content;
-		Map<String,String> map = new HashMap<>();
 		
-		content.forEach(line -> {
-			String cleaned = line.replaceAll("<.*>", "").replace("{field}", "");
-			map.put(cleaned, line);
-		});
+		LOG.debug("sort: content={}", content);
 		
-		res = map.keySet().stream()
-			.sorted()
-			.collect(Collectors.partitioningBy(p -> p.startsWith("@")))
-			.values().stream()
-			.flatMap(List::stream)
-			.map(map::get)
-			.collect(Collectors.toList());
-		
-		LOG.debug("sort: map={}", map);
+//		Map<String,String> map = new HashMap<>();
+//		
+//		content.forEach(line -> {
+//			String cleaned = line.replaceAll("<.*>", "").replace("{field}", "");
+//			map.put(cleaned, line);
+//		});
+//		
+//		res = map.keySet().stream()
+//			.sorted()
+//			.collect(Collectors.partitioningBy(p -> p.startsWith("@")))
+//			.values().stream()
+//			.flatMap(List::stream)
+//			.map(map::get)
+//			.collect(Collectors.toList());
+//		
+//		LOG.debug("sort: map={}", map);
 		
 		return res;
 	}

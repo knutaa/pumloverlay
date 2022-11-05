@@ -270,12 +270,12 @@ skinparam legendBackgroundColor #transparent
 skinparam legendBorderColor #transparent
 
 legend
-   |= <size:10>Color </size>|= <size:10>Description </size>|
-   | <#FFFFFFF> | <size:10>Resource (entry point) </size>|
-   | <#FCF2E3> | <size:10>Sub-resource </size>|
-   | <#FFFFE0> | <size:10>Sub-resource (reference entity) </size>|
-   | <#red> | <size:10>removed </size>|
- <size:10>(1) : Mandatory property</size>
+   |= <size:10>Color |= <size:10>Description |
+   | <#FFFFFFF> | <size:10>Resource (entry point) |
+   | <#FCF2E3> | <size:10>Sub-resource |
+   | <#FFFFE0> | <size:10>Sub-resource (reference entity) |
+   | <#red> | <size:10>removed |
+ <size:10>(1) : Mandatory property
 endlegend
 
 @enduml
