@@ -1,0 +1,121 @@
+@startuml
+'
+' Resource:  TroubleTicketSpecification
+' Source:    TMF621-TroubleTicket-v4.1.0.swagger.json
+'
+hide circle
+hide methods
+hide stereotype
+show <<Enumeration>> stereotype
+skinparam class {
+   BorderColor<<Extension>> red
+   FontColor<<Extension>> red
+   backgroundColor<<Enumeration>> #E6F5F7
+   backgroundColor<<Ref>> #FFFFE0
+   backgroundColor<<Pivot>> #FFFFFFF
+   backgroundColor<<Resource>> #FCF2E3
+   backgroundColor<<SubResource>> #FFFFFFF
+   backgroundColor<<SubResourceReference>> #FADADD
+}
+
+skinparam legend {
+   borderRoundCorner 0
+   borderColor red
+   backgroundColor white
+}
+
+class TroubleTicketSpecification  <<Pivot>> {
+    description : String
+    href : Uri
+    id : String
+    <color:red>lastUpdate : DateTime
+    name : String
+    status : String
+    validFor : TimePeriod
+    version : String
+    @baseType : String
+    <color:red>@schemaLocation : Uri
+    @type : String
+}
+
+class CharacteristicSpecificationRelationship <<Resource>> {
+    characteristicSpecificationId : String
+    name : String
+    parentSpecificationHref : Uri
+    parentSpecificationId : String
+    relationshipType : String
+    validFor : TimePeriod
+    @baseType : String
+    <color:red>@schemaLocation : Uri
+    @type : String
+}
+
+class RelatedParty  <<Ref>> {
+    <color:red>href : Uri
+    <color:red>{field}id : String (1)
+    <color:red>name : String
+    role : String
+    @baseType : String
+    {field}@referredType : String <color:red> (1)
+    <color:red>@schemaLocation : Uri
+    @type : String
+}
+
+class CharacteristicSpecification <<Resource>> {
+    configurable : Boolean
+    description : String
+    extensible : Boolean
+    id : String
+    isUnique : Boolean
+    maxCardinality : Integer
+    minCardinality : Integer
+    name : String
+    regex : String
+    validFor : TimePeriod
+    valueType : String
+    @baseType : String
+    <color:red>@schemaLocation : Uri
+    @type : String
+    @valueSchemaLocation : String
+}
+
+class CharacteristicValueSpecification <<Resource>> {
+    isDefault : Boolean
+    rangeInterval : String
+    regex : String
+    unitOfMeasure : String
+    validFor : TimePeriod
+    value : Any
+    valueFrom : Integer
+    valueTo : Integer
+    valueType : String
+    @baseType : String
+    <color:red>@schemaLocation : Uri
+    @type : String
+}
+
+TroubleTicketSpecification *-->  "0..*" CharacteristicSpecification : troubleTicketSpecCharacteristic
+
+TroubleTicketSpecification *-->  "0..*" RelatedParty : relatedParty
+
+CharacteristicSpecification *-->  "0..*" CharacteristicSpecificationRelationship : charSpecRelationship
+
+CharacteristicSpecification *-->  "0..*" CharacteristicValueSpecification : characteristicValueSpecification
+
+
+
+
+skinparam legendBackgroundColor #transparent
+skinparam legendBorderColor #transparent
+
+legend
+   |= <size:10>Color |= <size:10>Description |
+   | <#FFFFFFF> | <size:10>Resource (entry point) |
+   | <#FCF2E3> | <size:10>Sub-resource |
+   | <#FFFFE0> | <size:10>Sub-resource (reference entity) |
+   | <#red> | <size:10>removed |
+ <size:10>(1) : Mandatory property
+endlegend
+
+@enduml
+

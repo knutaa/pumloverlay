@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +24,8 @@ public class PumlClass extends PumlFormat {
 	boolean blank;
 	
 	Map<String,String> decorations;
-	
+	Map<String,PumlAttribute> attributes;
+
 	PumlClass(String cls, List<String> content, List<String> stereotypes) {
 		this.name = cls;
 		this.content = content;
@@ -30,19 +33,22 @@ public class PumlClass extends PumlFormat {
 		this.discriminators = new LinkedList<>();
 		this.blank = false;
 		this.decorations = new HashMap<>();
-		
+		this.attributes = new HashMap<>();
+
         LOG.debug("PumlClass: content={}", content);
 
 	}
 	
-	PumlClass(String cls, List<String> content, List<String> stereotypes, boolean blank, Map<String,String> decorations) {
+	PumlClass(String cls, Map<String,PumlAttribute> attributes, List<String> content, List<String> stereotypes, boolean blank, Map<String,String> decorations) {
 		this(cls,content,stereotypes);
 		this.blank = blank;
 		this.decorations.putAll(decorations);
+		this.attributes.putAll(attributes);
+
 	}
 	
-	PumlClass(String cls, List<String> content, List<String> stereotypes, List<String> discriminators, boolean blank, Map<String,String> decorations) {
-		this(cls,content,stereotypes,blank,decorations);
+	PumlClass(String cls, Map<String,PumlAttribute> attributes, List<String> content, List<String> stereotypes, List<String> discriminators, boolean blank, Map<String,String> decorations) {
+		this(cls,attributes, content,stereotypes,blank,decorations);
 		this.discriminators.addAll(discriminators);
 	}
 	
@@ -68,10 +74,15 @@ public class PumlClass extends PumlFormat {
 		
 		s.append(" ").append("{").append(NEWLINE);
 		
-		List<String> sortedContent = sort(content);
+//		List<String> sortedContent = sort(content);
+//		
+//		sortedContent.forEach(line -> {
+//			s.append(INDENT).append(line).append(NEWLINE);
+//		});
 		
-		sortedContent.forEach(line -> {
-			s.append(INDENT).append(line).append(NEWLINE);
+		Set<String> attributeNames = new TreeSet(attributes.keySet());
+		attributeNames.stream().forEach(attr -> {
+			s.append(INDENT).append(attributes.get(attr).toString());
 		});
 		
 		if(this.blank) {

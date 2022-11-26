@@ -40,6 +40,8 @@ public class App
 
 	Args args;
 	    	
+	static final String SPACE = " ";
+	
 	App(String ... argv) {
 		     				
 		args = new Args();
@@ -184,22 +186,39 @@ public class App
 			if(!base.classes.containsKey(cls)) {
 				base.classes.put(cls, overlay.classes.get(cls));
 			} else {
-				List<String> baseLines = base.classes.get(cls).content;
-				List<String> lines = overlay.classes.get(cls).content;
 				
-				List<List<String>> basePartitions = getPartition(baseLines);
-				List<List<String>> partitions = getPartition(lines);
-
-				// Out.println("basePartitions: " + basePartitions);
-				// Out.println("partitions: " + partitions);
-
-				List<String> attributes = mergeAttributes(basePartitions,partitions);
+				Map<String,PumlAttribute> baseAttributes = base.classes.get(cls).attributes;
 				
-				// Out.debug("attributes: before sort {}", attributes);
+				overlay.classes.get(cls).attributes.entrySet().stream().forEach(e -> {
+					String attrName = e.getKey();
+					if(!baseAttributes.containsKey(attrName)) {
+						baseAttributes.put(attrName,  e.getValue());
+					} else {
+						PumlAttribute baseAttribute = baseAttributes.get(attrName);
+						PumlAttribute overlayAttribute = e.getValue();
 
-				attributes = Sorter.sort(attributes);
+						baseAttribute.type = combineText(baseAttribute.type, overlayAttribute.type);
+						baseAttribute.mandatory = combineText(baseAttribute.mandatory, overlayAttribute.mandatory);
+						baseAttribute.cardinality = combineText(baseAttribute.cardinality, overlayAttribute.cardinality);
+					}
+				});
 				
-				// Out.debug("attributes: after sort {}", attributes);
+//				List<String> baseLines = base.classes.get(cls).content;
+//				List<String> lines = overlay.classes.get(cls).content;
+//				
+//				List<List<String>> basePartitions = getPartition(baseLines);
+//				List<List<String>> partitions = getPartition(lines);
+//
+//				// Out.println("basePartitions: " + basePartitions);
+//				// Out.println("partitions: " + partitions);
+//
+//				List<String> attributes = mergeAttributes(basePartitions,partitions);
+//				
+//				// Out.debug("attributes: before sort {}", attributes);
+//
+//				attributes = Sorter.sort(attributes);
+//				
+//				// Out.debug("attributes: after sort {}", attributes);
 
 				List<String> discriminators = mergeDiscriminators(base.classes.get(cls).discriminators,overlay.classes.get(cls).discriminators);
 
@@ -217,7 +236,7 @@ public class App
 					if(!item.getValue().isEmpty() || !baseDecorations.containsKey(item.getKey())) baseDecorations.put(item.getKey(), item.getValue());
 				});
 				
-				base.classes.get(cls).content=attributes;
+				// base.classes.get(cls).content=attributes;
 				
 				
 				
@@ -225,38 +244,50 @@ public class App
 		}		
 	}
 
+	private String combineText(String s1, String s2) {
+		if(s1.contentEquals(s2)) {
+			return s1;
+		} else if(s1.contains(s2)) {
+			return s1;
+		} else if(s2.contains(s1)) {
+			return s2;
+		} else {
+			return s1 + SPACE + s2;
+		}
+	}
+
 	private void processConnections(Puml base, Puml overlay) {
 	  	Set<String> connections = overlay.connections.keySet();
-			for(String key : connections) {
-				PumlConnection reverseConn = getReverse(base,key);
-				
-				if(!base.connections.containsKey(key) && reverseConn==null) {
-					base.connections.put(key, overlay.connections.get(key));
-				} else {
+		for(String key : connections) {
+			PumlConnection reverseConn = getReverse(base,key);
+			
+			if(!base.connections.containsKey(key) && reverseConn==null) {
+				base.connections.put(key, overlay.connections.get(key));
+			} else {
 
-					PumlConnection newConn = overlay.connections.get(key);
-					PumlConnection baseConn = reverseConn!=null ? reverseConn : base.connections.get(key);
-					
-					if(!baseConn.left_multiplicity.isBlank()) {
-						baseConn.left_multiplicity = mergeMultiplicity(baseConn.left_multiplicity,newConn.left_multiplicity, newConn.right_multiplicity);
-					}
-					
-					if(!baseConn.right_multiplicity.isBlank()) {
-						baseConn.right_multiplicity = mergeMultiplicity(baseConn.right_multiplicity,newConn.left_multiplicity, newConn.right_multiplicity);
-					}		
-					
-					if(baseConn.connector.contains("[#") && newConn.connector.contains("[#")) {
-						baseConn.connector = baseConn.connector.replaceAll("\\[#[a-z]+\\]", "");
-					}
-					
-					if(!baseConn.property_color.isEmpty() && !newConn.property_color.isEmpty()) {
-						baseConn.property_color="";
-					}
-					
-					base.connections.put(key,baseConn);
-					
+				PumlConnection newConn = overlay.connections.get(key);
+				PumlConnection baseConn = reverseConn!=null ? reverseConn : base.connections.get(key);
+				
+				if(!baseConn.left_multiplicity.isBlank()) {
+					baseConn.left_multiplicity = mergeMultiplicity(baseConn.left_multiplicity,newConn.left_multiplicity, newConn.right_multiplicity);
 				}
-			}				
+				
+				if(!baseConn.right_multiplicity.isBlank()) {
+					baseConn.right_multiplicity = mergeMultiplicity(baseConn.right_multiplicity,newConn.left_multiplicity, newConn.right_multiplicity);
+				}		
+				
+				if(baseConn.connector.contains("[#") && newConn.connector.contains("[#")) {
+					baseConn.connector = baseConn.connector.replaceAll("\\[#[a-z]+\\]", "");
+				}
+				
+				if(!baseConn.property_color.isEmpty() && !newConn.property_color.isEmpty()) {
+					baseConn.property_color="";
+				}
+				
+				base.connections.put(key,baseConn);
+				
+			}
+		}				
 	}
 	   
 	private PumlConnection getReverse(Puml base, String key) {
@@ -292,12 +323,21 @@ public class App
     	List<String> res = new LinkedList<>();
     	
     	if(basePartitions.size()>0 && partitions.size()>0) {
-    		return mergeList(basePartitions.get(0),partitions.get(0));
+    		return mergeAttributeList(basePartitions.get(0),partitions.get(0));
     	}
     	
 		return res;
 	}
 
+	private List<String> mergeAttributeList(List<String> partA, List<String> partB) {
+    	List<String> res = new LinkedList<>();
+    	
+		res.addAll(partA);
+		res.addAll(partB.stream().filter(s->!partA.contains(s)).collect(Collectors.toList()));
+	
+		return res;
+	}
+	
 	private List<String> mergeList(List<String> partA, List<String> partB) {
     	List<String> res = new LinkedList<>();
     	
@@ -343,11 +383,11 @@ public class App
         ParseTree tree = parser.uml(); 
 
         ParseTreeWalker walker = new ParseTreeWalker();
-        PumlListener classListener= new PumlListener();
+        PumlListener listener = new PumlListener();
 
-        walker.walk(classListener, tree);
+        walker.walk(listener, tree);
 
-        return classListener.puml;
+        return listener.puml;
 
     }
 }

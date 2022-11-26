@@ -30,7 +30,37 @@ public class PumlListener extends PlantumlBaseListener {
         
         List<String> content = new LinkedList<>();
         
+        Map<String,PumlAttribute> attributes = new HashMap<>();
+        
         if(ctx.attribute()!=null) {
+        	ctx.attribute().forEach(arg -> {
+        		// Out.debug("attribute ... {}", arg);
+        		String name = getFullText(arg.type_declaration());
+        		
+        		String attr_color  = getFullText(arg.attribute_color);
+        		String attr_field  = getFullText(arg.attr_field());
+        		String start_sep = getFullText(arg.start_sep);
+        	    String visibility = getFullText(arg.visibility());
+        	    String modifiers =  getFullText(arg.modifiers());
+        	    String type_marker = arg.type_marker!=null ? arg.type_marker.getText() : "";
+        	    String type_color = getFullText(arg.type_color);
+        	    String enum_marker = getFullText(arg.enum_marker());
+        	    String type = getFullText(arg.ident());
+        	    String mandatory =  arg.mandatory()!=null ? getFullText(arg.mandatory().mand()) : "";
+        	    String mandatory_color = arg.mandatory()!=null ? getFullText(arg.mandatory().color()) : "";
+        	    String cardinality = getFullText(arg.cardinality());
+        	    String end_sep = getFullText(arg.end_sep);
+        	    String attr_content = getFullText(arg);
+        		
+        		PumlAttribute pa = new PumlAttribute(attr_color, attr_field, start_sep, visibility, modifiers, name, 
+        											 type_marker, type_color, 
+        											 enum_marker, type, 
+        											 mandatory_color, mandatory, cardinality, end_sep, attr_content);
+
+        		attributes.put(name, pa);
+        		
+        	});
+        	
         	content.addAll( ctx.attribute().stream().map(PumlListener::getFullText).collect(Collectors.toList()) );  	
         }
         
@@ -74,10 +104,10 @@ public class PumlListener extends PlantumlBaseListener {
         	
         	LOG.debug("discriminator: {}",  discriminators);
         	
-        	puml.classes.put(cls, new PumlClass(cls,content,stereotypes,discriminators,blank,decorations) );
+        	puml.classes.put(cls, new PumlClass(cls,attributes, content,stereotypes,discriminators,blank,decorations) );
         	
         } else {
-        	puml.classes.put(cls, new PumlClass(cls,content,stereotypes,blank,decorations));
+        	puml.classes.put(cls, new PumlClass(cls,attributes, content,stereotypes,blank,decorations));
 
         }
         

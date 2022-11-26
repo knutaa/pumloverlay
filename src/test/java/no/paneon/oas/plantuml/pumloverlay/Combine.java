@@ -53,6 +53,11 @@ public class Combine extends TestCase {
     	test("Resource_Service_640.puml");
     }
     
+    public void test6()
+    {
+    	test("Resource_TroubleTicketSpecification.puml");
+    }
+    
     public void test(String file)
     {
 
@@ -66,7 +71,7 @@ public class Combine extends TestCase {
 	        PlantumlLexer lexer = new PlantumlLexer(input);
 	        CommonTokenStream tokens = new CommonTokenStream(lexer);
 	        PlantumlParser parser = new PlantumlParser(tokens);
-	
+
 	        ErrorListener errorListener = new ErrorListener();
 
 	        lexer.removeErrorListeners();
@@ -74,15 +79,15 @@ public class Combine extends TestCase {
 
 	        parser.removeErrorListeners();
 	        parser.addErrorListener( errorListener );
-	 
+	        
 	        ParseTree tree = parser.uml(); 
 
 	        ParseTreeWalker walker = new ParseTreeWalker();
-	        PumlListener classListener= new PumlListener();
+	        PumlListener listener= new PumlListener();
 
-	        walker.walk(classListener, tree);
-
-	        // System.out.println(classListener.puml.toString());
+	        walker.walk(listener, tree);
+	        
+	        System.out.println(listener.puml.toString());
 
 	        assert(true);
 	        

@@ -29,7 +29,7 @@ show_statement:
 
 legend_statement:
 	'legend'
-	legend_rows*
+	legend_rows+
 	'endlegend'
 	;
 	
@@ -60,7 +60,7 @@ decorationItem: '\\n' color? ident
 	;
 	
 cardinality: 
-	'[' NUMBER '..' (NUMBER|'*') ']'
+	color? '[' NUMBER '..' (NUMBER|'*') ']'
 	;
 	
 discriminators:
@@ -84,13 +84,14 @@ skinparam_declaration:
     ;
 	
 attribute:
-	color?
+	attribute_color=color?
 	attr_field?
 	start_sep=separator?
     visibility?
     modifiers?
     type_declaration?
-    ':'?
+    type_marker=':'?
+    type_color=color?
     enum_marker? 
     ident
     mandatory?
@@ -98,7 +99,9 @@ attribute:
     end_sep=separator?
     ;
 
-mandatory: '(1)' ;
+mandatory: mandatory_color=color? mand ;
+
+mand: '(1)' ;
  
 enum_marker: 'ENUM' ;
  
@@ -185,10 +188,14 @@ stereotype:
     '<<' name=ident('(' args+=ident ')')? '>>'
     ;
 
+//type_declaration:
+//    ident '<' template_argument_list? '>'               # template_type
+//    | ident '[' ']'                                     # list_type
+//    | ident                                             # simple_type
+//    ;
+
 type_declaration:
-    ident '<' template_argument_list? '>'               # template_type
-    | ident '[' ']'                                     # list_type
-    | ident                                             # simple_type
+    ident                                             # simple_type
     ;
 
 class_type:
@@ -309,7 +316,8 @@ NEWPAGE : 'newpage' -> channel(HIDDEN)
 
 // NEWLINE  :  ENDLINE ; // [\r\n]+; // '\r'? '\n'; // [\r\n];
 
-IDENT : NONDIGIT ( DIGIT | NONDIGIT )*;
+IDENT : IDENT1 | (IDENT1 '.' IDENT1)+ ;
+IDENT1 : NONDIGIT ( DIGIT | NONDIGIT )*;
 NUMBER : ( DIGIT )+;
 HEX : '#' ( DIGIT | NONDIGIT )+;
 
