@@ -24,6 +24,15 @@ skinparam legend {
    backgroundColor white
 }
 
+
+
+class TroubleTicketSpecificationStatusExampleType <<Enumeration>> {
+    inDesign
+    rejected
+    active
+    retired
+}
+
 class ServiceTestSpecification  <<Pivot>> {
     <color:red>description : String
     <color:red>href : Uri
@@ -218,6 +227,7 @@ class CharacteristicValueSpecification <<Resource>> {
     <color:red>@schemaLocation : Uri
     @type : String
 }
+
 
 'sequence: 13
 'processing edges for ServiceTestSpecification

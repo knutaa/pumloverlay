@@ -34,9 +34,17 @@ public class PumlListener extends PlantumlBaseListener {
         
         if(ctx.attribute()!=null) {
         	ctx.attribute().forEach(arg -> {
-        		// Out.debug("attribute ... {}", arg);
-        		String name = getFullText(arg.type_declaration());
+        		String name = getFullText(arg.name_declaration());
+        	    String type = getFullText(arg.ident());
+
         		
+        		if(name.isEmpty()) {
+        			name = type;
+        			type = "";
+        		}
+        		
+        		LOG.debug("attribute ... {}", name);
+
         		String attr_color  = getFullText(arg.attribute_color);
         		String attr_field  = getFullText(arg.attr_field());
         		String start_sep = getFullText(arg.start_sep);
@@ -45,7 +53,6 @@ public class PumlListener extends PlantumlBaseListener {
         	    String type_marker = arg.type_marker!=null ? arg.type_marker.getText() : "";
         	    String type_color = getFullText(arg.type_color);
         	    String enum_marker = getFullText(arg.enum_marker());
-        	    String type = getFullText(arg.ident());
         	    String mandatory =  arg.mandatory()!=null ? getFullText(arg.mandatory().mand()) : "";
         	    String mandatory_color = arg.mandatory()!=null ? getFullText(arg.mandatory().color()) : "";
         	    String cardinality = getFullText(arg.cardinality());

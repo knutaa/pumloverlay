@@ -89,7 +89,7 @@ attribute:
 	start_sep=separator?
     visibility?
     modifiers?
-    type_declaration?
+    name=name_declaration?
     type_marker=':'?
     type_color=color?
     enum_marker? 
@@ -194,9 +194,11 @@ stereotype:
 //    | ident                                             # simple_type
 //    ;
 
-type_declaration:
+name_declaration:
     ident                                             # simple_type
     ;
+    
+type_declaration: ident ; 
 
 class_type:
     'abstract' 'class'?
