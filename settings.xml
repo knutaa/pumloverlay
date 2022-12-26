@@ -22,6 +22,15 @@
             <enabled>true</enabled>
           </snapshots>
         </repository>
+        
+        <repository>
+          <id>plantuml</id>
+          <url>https://maven.pkg.github.com/plantuml/plantuml</url>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+        
       </repositories>
     </profile>
   </profiles>
@@ -32,6 +41,13 @@
       <username>${env.USER_NAME}</username>
       <password>${env.ACCESS_TOKEN}</password>
     </server>
+    
+    <server>
+      <id>plantuml</id>
+      <username>${env.USER_NAME}</username>
+      <password>${env.ACCESS_TOKEN}</password>
+    </server>
+    
     <server>
       <id>packages</id>
       <username>${env.USER_NAME}</username>
