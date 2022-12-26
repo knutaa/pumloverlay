@@ -71,6 +71,8 @@ public class PumlAttribute extends PumlFormat {
 	public String toString() {
 		StringBuilder s = new StringBuilder();
  
+		if(!this.mandatory.isEmpty() && this.attr_field.isEmpty()) this.attr_field = "{field}";
+		
 		if(!this.name.isEmpty()) {
 			s.append(this.attribute_color);
 			s.append(this.attr_field); if(!this.attr_field.isEmpty()) s.append(SPACE);

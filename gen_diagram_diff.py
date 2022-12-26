@@ -159,7 +159,7 @@ def execute(args):
     setup_directory(args.target_directory)
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir_name=str(tmpdir) # tmpdir_name='./tmp' # tmpdir_name=str(tmpdir)
+        tmpdir_name= './tmp' # str(tmpdir) # tmpdir_name='./tmp' # tmpdir_name=str(tmpdir)
 
         expand_json=create_config(tmpdir_name,'expand.json')
 

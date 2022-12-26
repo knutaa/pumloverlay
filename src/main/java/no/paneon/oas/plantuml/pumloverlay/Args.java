@@ -8,10 +8,34 @@ import com.beust.jcommander.Parameter;
 
 public class Args {
 
-	@Parameter(names = { "--file" }, description = "Plantuml input file (two or more)")
-	public List<String> files = new LinkedList<>();
+	public class Common {
+		@Parameter(names = { "--target-directory" }, description = "Target directory for generated overlays (defaults to current directory)")
+		public String targetDirectory = ".";
+		
+		@Parameter(names = { "--generate-images" }, description = "Generate image of .puml files")
+		public boolean generateImages = false;
+		
+	}
 
-	@Parameter(names = { "--output" }, description = "Plantuml output file")
-	public String output = "output.puml";
+	public class Overlay extends Common {
+		@Parameter(names = { "--file" }, description = "Plantuml input file (two or more)")
+		public List<String> files = new LinkedList<>();
+	
+		@Parameter(names = { "--output" }, description = "Plantuml output file")
+		public String output = "output.puml";
+	
+	}
 
+	public class Batch extends Common {
+		@Parameter(names = { "--prev" }, description = "Plantuml input file (prev/earlier version)", required=true)
+		public String prev;
+	
+		@Parameter(names = { "--current" }, description = "Plantuml input file (current/latest version)", required=true)
+		public String current;
+		
+		@Parameter(names = { "-c", "--config" }, description = "Config files (.json) - one or more")
+		public List<String> configs = new ArrayList<>();
+
+	}
+	
 }
