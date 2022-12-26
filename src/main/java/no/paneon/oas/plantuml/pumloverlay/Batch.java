@@ -73,7 +73,7 @@ public class Batch
 	        
 	    	// Files.deleteIfExists(path);
 
-	    	Out.debug("... done");
+	    	Out.debug("... done - output to {}", args.targetDirectory);
 
 	    	
     	} catch(Exception ex) {

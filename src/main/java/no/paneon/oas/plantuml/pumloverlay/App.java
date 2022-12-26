@@ -46,9 +46,7 @@ public class App
     {
 		LOG.debug("Plantuml overlay");
         
-		// Config.forceConfig();
-		
-		// Config.setBoolean("pumloverlay",true);
+		System.setProperty("java.awt.headless", "true");
 		
 		Out.debug("Plantuml overlay");
 
