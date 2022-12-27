@@ -36,6 +36,18 @@ public class Args {
 		@Parameter(names = { "-c", "--config" }, description = "Config files (.json) - one or more")
 		public List<String> configs = new ArrayList<>();
 
+		@Parameter(names = { "--addedLabel" }, description = "Legend to use for added elements (in current but not in prev) - default is 'added'")
+		public String addedLabel = "added";
+		
+		@Parameter(names = { "--addedColor" }, description = "Color to use for added elements - default is 'blue'")
+		public String addedColor = "blue";
+		
+		@Parameter(names = { "--removedLabel" }, description = "Legend to use for removed (or replaced) elements (in prev but not identical in current) - default is 'removed'")
+		public String removedLabel = "removed";
+		
+		@Parameter(names = { "--removedColor" }, description = "Color to use for removed elements - default is 'red'")
+		public String removedColor = "red";
+		
 	}
 	
 }

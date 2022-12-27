@@ -47,13 +47,19 @@ public class Batch
 	    	
 	    	Out.debug("... temporary directory {}",  tmpdir);
 	    		    	
-	    	extract_extensions(args.prev,args.current,"added","blue",tmpdir,"current", Optional.empty());
+	    	String addedLabel = args.addedLabel;
+	    	String addedColor = args.addedColor;
+	    	
+	    	String removedLabel = args.removedLabel;
+	    	String removedColor = args.removedColor;
+	    	
+	    	extract_extensions(args.prev,args.current,addedLabel,addedColor,tmpdir,"current", Optional.empty());
 	    	
 	        Optional<String> subresource_config=create_subresource_config(tmpdir, tmpdir + "/current/diagrams.yaml");
 
 	    	LOG.debug("... temporary directory  subresource_config={}",   subresource_config);
 
-	        extract_extensions(args.current,args.prev,"removed","red",tmpdir,"prev", subresource_config);
+	        extract_extensions(args.current,args.prev,removedLabel,removedColor,tmpdir,"prev", subresource_config);
 	    		    	
 	        for(String base : getFiles(tmpdir,"current",".puml")) {
 		    	Out.debug("... generating overlay for {}", base);
