@@ -48,6 +48,9 @@ public class Args {
 		@Parameter(names = { "--removedColor" }, description = "Color to use for removed elements - default is 'red'")
 		public String removedColor = "red";
 		
+		@Parameter(names = { "--keep-tempdir" }, description = "Keep temporary directory (can be useful for debug)")
+		public Boolean keepTempdir=false;
+		
 	}
 	
 }

@@ -1,9 +1,15 @@
 package no.paneon.oas.plantuml.pumloverlay;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,7 +67,7 @@ public class Batch
 
 	        extract_extensions(args.current,args.prev,removedLabel,removedColor,tmpdir,"prev", subresource_config);
 	    		    	
-	        for(String base : getFiles(tmpdir,"current",".puml")) {
+	        for(String base : Utils.getFiles(".puml", tmpdir,"current")) {
 		    	Out.debug("... generating overlay for {}", base);
 
 		    	String file1 = tmpdir + "/prev/" + base;
@@ -74,36 +80,37 @@ public class Batch
 	        };
 	        
 	        if(this.args.generateImages) {
-	        	generateImage(getFiles(args.targetDirectory,"",".puml"));
+	        	GenerateDiagram.generateImage(args.targetDirectory, Utils.getFiles(".puml", args.targetDirectory));
 	        }
 	        
-	    	// Files.deleteIfExists(path);
-
+	        if(!this.args.keepTempdir) {
+	        		        	
+	        	Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+	                @Override
+	                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+	                    Files.delete(dir);
+	                    return FileVisitResult.CONTINUE;
+	                }
+	                
+	                @Override
+	                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+	                    Files.delete(file);
+	                    return FileVisitResult.CONTINUE;
+	                };
+	        	});
+	        }
+	        
 	    	Out.debug("... done - output to {}", args.targetDirectory);
 
 	    	
     	} catch(Exception ex) {
     		Out.printAlways("ERROR: {}", ex.getLocalizedMessage());
+    		ex.printStackTrace();
     	}
     	
     }
     
-    private void generateImage(List<String> files) {
-        for(String base : files) {
-	    	Out.debug("... generating image for {}", base);
-	    	try {
-	        	File source = new File(args.targetDirectory + "/" + base);
-		    	SourceFileReader reader = new SourceFileReader(source);
-		    	List<GeneratedImage> list = reader.getGeneratedImages();
-		    	// Generated files
-		    	File png = list.get(0).getPngFile();
-		    	// Out.debug("... {} png={}", base, png.getName());
-	    	} catch(Exception ex) {
-	    		Out.printAlways("ERROR: {}", ex.getLocalizedMessage());
-	    	}
-        };		
-	}
-
+	
 	private void generate_overlay(String base, String file1, String file2, String targetDirectory) {    	
 
     	Args.Overlay  argsOverlay = (new Args()).new Overlay();
@@ -119,17 +126,6 @@ public class Batch
 		Overlay overlay = new Overlay(argsOverlay);
 		overlay.execute();
 		
-	}
-
-	private List<String> getFiles(String dir, String subdir,String ending) {
-    	List<String> res = Stream.of(new File(dir + "/" + subdir).listFiles())
-					        .filter(file -> !file.isDirectory())
-					        .map(File::getName)
-					        .filter(f -> f.endsWith(ending))
-					        .collect(Collectors.toList());
-    	
-    	return res;
-    	
 	}
 
 	private Optional<String> create_subresource_config(String dir, String file) {
