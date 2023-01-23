@@ -75,7 +75,7 @@ public class Batch
 		    	if(isFile(file1)) {
 		    		generate_overlay(base,file1,file2,args.targetDirectory);
 		    	} else {
-		    		Utils.copyFile(file2, args.targetDirectory + "/" + file2);
+		    		Utils.copyFile(file2, args.targetDirectory + "/" + base);
 		    	}
 	        };
 	        
