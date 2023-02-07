@@ -75,7 +75,8 @@ public class Batch
 		    	if(isFile(file1)) {
 		    		generate_overlay(base,file1,file2,args.targetDirectory);
 		    	} else {
-		    		Utils.copyFile(file2, args.targetDirectory + "/" + base);
+		    		final boolean OVERWRITE=true;
+		    		Utils.copyFile(file2, args.targetDirectory + "/" + base, OVERWRITE);
 		    	}
 	        };
 	        
@@ -88,14 +89,22 @@ public class Batch
 	        	Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
 	                @Override
 	                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-	                    Files.delete(dir);
+	                	try {
+	                		Files.delete(dir);
+	                	} catch(Exception e) {
+	                		// ignore
+	                	}
 	                    return FileVisitResult.CONTINUE;
 	                }
 	                
 	                @Override
 	                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-	                    Files.delete(file);
-	                    return FileVisitResult.CONTINUE;
+	                	try {
+	                		Files.delete(file);
+	                	} catch(Exception e) {
+	                		// ignore
+	                	}	                    
+	                	return FileVisitResult.CONTINUE;
 	                };
 	        	});
 	        }
