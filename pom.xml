@@ -19,6 +19,14 @@
 	<git-commit-id-plugin.version>4.0.4</git-commit-id-plugin.version>
   </properties>
 
+	<distributionManagement>
+		<repository>
+			<id>packages</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/knutaa/pumloverlay</url>
+		</repository>
+	</distributionManagement>
+
   <dependencies>
 
 	<dependency>
