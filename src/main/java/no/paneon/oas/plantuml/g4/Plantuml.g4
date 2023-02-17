@@ -93,12 +93,16 @@ attribute:
     type_marker=':'?
     type_color=color?
     enum_marker? 
-    ident
+    type_ident
     mandatory?
     cardinality?
     end_sep=separator?
     ;
 
+type_ident:
+	ident ('/' ident)?
+	;
+	
 mandatory: mandatory_color=color? mand ;
 
 mand: '(1)' ;

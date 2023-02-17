@@ -35,7 +35,7 @@ public class PumlListener extends PlantumlBaseListener {
         if(ctx.attribute()!=null) {
         	ctx.attribute().forEach(arg -> {
         		String name = getFullText(arg.name_declaration());
-        	    String type = getFullText(arg.ident());
+        	    String type = getFullText(arg.type_ident());
 
         		
         		if(name.isEmpty()) {
