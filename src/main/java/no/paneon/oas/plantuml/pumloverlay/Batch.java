@@ -51,8 +51,10 @@ public class Batch
 	    	Path path = Paths.get(FileUtils.getTempDirectory().getAbsolutePath(), UUID.randomUUID().toString());
 	    	String tmpdir = Files.createDirectories(path).toFile().getAbsolutePath();
 	    	
-	    	Out.debug("... temporary directory {}",  tmpdir);
-	    		    	
+	    	if(args.keepTempdir) {
+	    		Out.debug("... temporary directory {}",  tmpdir);
+	    	}
+	    	
 	    	String addedLabel = args.addedLabel;
 	    	String addedColor = args.addedColor;
 	    	
