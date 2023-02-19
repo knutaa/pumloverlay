@@ -100,7 +100,7 @@ attribute:
     ;
 
 type_ident:
-	ident ('/' ident)?
+	ident ('/' ident)? | '{' '}'
 	;
 	
 mandatory: mandatory_color=color? mand ;
