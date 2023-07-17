@@ -1,0 +1,515 @@
+@startuml
+class RelatedProductOrderItem <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : Uri
+   @type : String
+   orderItemAction : String
+   {field} orderItemId : String (1)
+   productOrderHref : String
+   {field} productOrderId : String (1)
+   role : String
+}
+
+class ProductOfferingRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field}//                                        //
+}
+
+class ObjectArrayCharacteristic<extends \nCharacteristic > <<Resource>> {
+   value : object [0..*]
+}
+
+class ProductRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   {field}//                                        //
+}
+
+class ProductPrice<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   description : String
+   name : String
+   priceType : String <color:blue>(1)
+   recurringChargePeriod : String
+   unitOfMeasure : String
+}
+
+class PlaceRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   {field}//                                        //
+}
+
+class StringCharacteristic<extends \nCharacteristic > <<Resource>> {
+   {field} value : String (1)
+}
+
+class GeographicAddressValue<extends \nExtensible > <<Resource>> {
+   city : String
+   country : String
+   locality : String
+   postcode : String
+   stateOrProvince : String
+   streetName : String
+   streetNr : String
+   streetNrLast : String
+   streetNrLastSuffix : String
+   streetNrSuffix : String
+   streetSuffix : String
+   streetType : String
+}
+
+class PriceAlteration<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   applicationDuration : Integer
+   description : String
+   name : String
+   <color:red>{field} priceType : String (1)
+   priority : Integer
+   recurringChargePeriod : String
+   unitOfMeasure : String
+}
+
+class TargetProductSchema <<Resource>> {
+   @baseType : String
+   {field} @schemaLocation : String (1)
+   {field} @type : String (1)
+}
+
+class ObjectCharacteristic<extends \nCharacteristic > <<Resource>> {
+   {field} value : object (1)
+}
+
+class ProductOfferingPriceRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field}//                                        //
+}
+
+class NumberCharacteristic<extends \nCharacteristic > <<Resource>> {
+   {field} value : Number (1)
+}
+
+class ProductRelationship<extends \nEntityRef\nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   id : String
+   relationshipType : String <color:blue>(1)
+}
+
+class GeographicLocationValue<extends \nExtensible > <<Resource>> {
+   bbox : Number [0..*]
+}
+
+class RelatedPlaceRefOrValue <<Resource>> {
+   {field} @baseType : String (1)
+   {field} @referredType : String (1)
+   {field} @schemaLocation : String (1)
+   {field} @type : String (1)
+   {field} href : String (1)
+   {field} id : String (1)
+   {field} name : String (1)
+   {field} role : String (1)
+   {field}//                                        //
+   --
+   discriminator:
+   GeographicAddress
+   GeographicLocation
+   RelatedPlaceRefOrValue
+   PlaceRef
+}
+
+class ProductTerm<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   description : String
+   duration : <color:red>Duration <color:blue>Quantity
+   name : String
+   validFor : TimePeriod
+}
+
+class ProductStatusType <<Enumeration>> {
+   aborted
+   active
+   cancelled
+   created
+   pendingActive
+   pendingTerminate
+   suspended
+   terminated
+}
+
+class ProductValue<extends \nExtensible > <<Resource>> {
+   creationDate : DateTime
+   description : String
+   href : String
+   id : String
+   isBundle : Boolean
+   isCustomerVisible : Boolean
+   name : String
+   orderDate : DateTime
+   productSerialNumber : String
+   startDate : DateTime
+   status : ProductStatusType
+   terminationDate : DateTime
+}
+
+class ItemActionType <<Enumeration>> {
+   add
+   delete
+   modify
+   noChange
+}
+
+class CharacteristicRelationship<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   id : String
+   relationshipType : String
+}
+
+class BooleanArrayCharacteristic<extends \nCharacteristic > <<Resource>> {
+   value : Boolean [0..*]
+}
+
+class BillingAccountRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   ratingType : String
+}
+
+class Characteristic<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   id : String
+   name : String <color:blue>(1)
+   valueType : String
+   --
+   discriminator:
+   ObjectCharacteristic
+   NumberCharacteristic
+   BooleanArrayCharacteristic
+   Characteristic
+   NumberArrayCharacteristic
+   BooleanCharacteristic
+   ObjectArrayCharacteristic
+   IntegerCharacteristic
+   StringArrayCharacteristic
+   IntegerArrayCharacteristic
+   StringCharacteristic
+}
+
+class GeographicSubAddressUnit<extends \nExtensible > <<Resource>> {
+   subUnitNumber : String
+   subUnitType : String
+}
+
+class ProductRefOrValue <<SubResource>> {
+   {field} @baseType : String (1)
+   {field} @referredType : String (1)
+   {field} @schemaLocation : String (1)
+   {field} @type : String (1)
+   {field} description : String (1)
+   {field} href : String (1)
+   {field} id : String (1)
+   {field} isBundle : Boolean (1)
+   {field} isCustomerVisible : Boolean (1)
+   {field} name : String (1)
+   {field} orderDate : DateTime (1)
+   {field} productSerialNumber : String (1)
+   {field} randomAtt : String (1)
+   {field} startDate : DateTime (1)
+   {field} status : ProductStatusType (1)
+   {field} terminationDate : DateTime (1)
+   {field}//                                        //
+   --
+   discriminator:
+   Product
+   ProductRef
+}
+
+class Price<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   dutyFreeAmount : Money
+   percentage : Float
+   taxIncludedAmount : Money
+   taxRate : Float
+}
+
+class GeographicSubAddressValue<extends \nExtensible > <<Resource>> {
+   buildingName : String
+   levelNumber : String
+   levelType : String
+   name : String
+   privateStreetName : String
+   privateStreetNumber : String
+   subAddressType : String
+}
+
+class RelatedOrderItem<extends \nExtensible > <<Resource>> {
+   @referredType : String
+   orderHref : String
+   orderId : String
+   orderItemAction : ItemActionType
+   orderItemId : String
+   role : String
+}
+
+class AgreementItemRef<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   agreementHref : String
+   agreementId : String
+   agreementItemId : String
+   agreementName : String
+   {field} href : String (1)
+   {field} id : String (1)
+   {field} name : String (1)
+}
+
+class NumberArrayCharacteristic<extends \nCharacteristic > <<Resource>> {
+   value : Number [0..*]
+}
+
+class BooleanCharacteristic<extends \nCharacteristic > <<Resource>> {
+   {field} value : Boolean (1)
+}
+
+class IntegerCharacteristic<extends \nCharacteristic > <<Resource>> {
+   {field} value : Integer (1)
+}
+
+class RelatedParty<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String <color:blue>(1)
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   role : String
+}
+
+class ResourceRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field} value : String (1)
+   {field}//                                        //
+}
+
+class StringArrayCharacteristic<extends \nCharacteristic > <<Resource>> {
+   value : String [0..*]
+}
+
+class IntegerArrayCharacteristic<extends \nCharacteristic > <<Resource>> {
+   value : Integer [0..*]
+}
+
+class ServiceRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field}//                                        //
+}
+
+class ProductSpecificationRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field} version : String (1)
+   {field}//                                        //
+}
+
+ProductSpecificationRef *--> "0..1" TargetProductSchema : targetProductSchema
+
+BooleanArrayCharacteristic <..  Characteristic 
+
+RelatedOrderItem -right[hidden]->  ItemActionType 
+
+ProductValue *--> "0..*" ProductRelationship : productRelationship
+
+ProductOfferingRef "0..1" <--*  ProductRefOrValue : productOffering
+
+ProductRelationship *--> "1" ProductRefOrValue : product
+
+RelatedPlaceRefOrValue ..>  GeographicLocationValue 
+
+Characteristic ..>  ObjectArrayCharacteristic 
+
+Characteristic ..>  StringArrayCharacteristic 
+
+PriceAlteration *-right-> "1" Price : price
+
+RelatedPlaceRefOrValue ..>  GeographicAddressValue 
+
+NumberCharacteristic <..  Characteristic 
+
+ProductPrice *--> "0..*" PriceAlteration : productPriceAlteration
+
+Characteristic ..>  StringCharacteristic 
+
+RelatedParty "0..*" <--*  ProductRefOrValue : relatedParty
+
+ProductValue -right[hidden]->  ProductStatusType 
+
+ProductRefOrValue *--> "0..*" ProductTerm : productTerm
+
+ProductRefOrValue *--> "0..1" ProductSpecificationRef : productSpecification
+
+CharacteristicRelationship "0..*" <--*  Characteristic : characteristicRelationship
+
+ProductValue *--> "0..*" RelatedParty : relatedParty
+
+ProductRefOrValue *-left-> "0..1" BillingAccountRef : billingAccount
+
+ProductValue *--> "0..*" ServiceRef : realizingService
+
+ProductValue *--> "0..*" ProductTerm : productTerm
+
+ProductRefOrValue -right[hidden]->  ProductStatusType 
+
+ProductValue *--> "0..1" ProductSpecificationRef : productSpecification
+
+ProductValue *--> "0..*" RelatedPlaceRefOrValue : place
+
+ProductValue *--> "0..*" RelatedOrderItem : productOrderItem
+
+BillingAccountRef "0..1" <--*  ProductPrice : billingAccount
+
+ProductValue *--> "0..*" Characteristic : productCharacteristic
+
+ProductRefOrValue ..>  ProductValue 
+
+ProductPrice *-left-> "0..1" ProductOfferingPriceRef : productOfferingPrice
+
+GeographicSubAddressValue *--> "0..*" GeographicSubAddressUnit : subUnit
+
+RelatedPlaceRefOrValue ..>  PlaceRef 
+
+ProductOfferingPriceRef "0..1" <--*  PriceAlteration : productOfferingPrice
+
+ProductValue *--> "0..*" ResourceRef : realizingResource
+
+ProductValue *--> "0..1" BillingAccountRef : billingAccount
+
+ProductRefOrValue *-right-> "0..*" ProductRefOrValue : product
+
+ProductRefOrValue ..>  ProductRef 
+
+ProductRefOrValue *--> "0..*" ProductPrice : productPrice
+
+ProductPrice *--> "<color:red>0..1 <color:blue>1" Price : price
+
+Characteristic ..>  NumberArrayCharacteristic 
+
+RelatedProductOrderItem "0..*" <--*  ProductRefOrValue : productOrderItem
+
+RelatedPlaceRefOrValue "0..*" <--*  ProductRefOrValue : place
+
+ProductValue *--> "0..*" AgreementItemRef : agreementItem
+
+ProductRefOrValue *--> "0..*" ServiceRef : realizingService
+
+Characteristic ..>  IntegerArrayCharacteristic 
+
+RelatedPlaceRefOrValue -left[hidden]-  ProductPrice 
+
+ProductRefOrValue "0..*" <--*  ProductValue : product
+
+Characteristic .right.>  ObjectCharacteristic 
+
+ProductValue *--> "0..*" ProductPrice : productPrice
+
+ProductValue *--> "0..1" ProductOfferingRef : productOffering
+
+ProductRefOrValue *--> "0..*" Characteristic : productCharacteristic
+
+ProductSpecificationRef -left[hidden]-  ProductPrice 
+
+AgreementItemRef "0..*" <--*  ProductRefOrValue : agreement
+
+Characteristic ..>  IntegerCharacteristic 
+
+ProductRefOrValue *--> "0..*" ResourceRef : realizingResource
+
+GeographicAddressValue *--> "0..1" GeographicSubAddressValue : geographicSubAddress
+
+ProductRelationship "0..*" <--*  ProductRefOrValue : productRelationship
+
+ProductPrice *--> "0..*" PriceAlteration : priceAlteration
+
+BooleanCharacteristic <..  Characteristic 
+
+hide circle
+hide methods
+hide stereotype
+show <<Enumeration>> stereotype
+skinparam legend {
+   borderRoundCorner 0
+   borderColor red
+   backgroundColor white
+}
+skinparam class {
+   BorderColor<<Extension-1>> red
+   FontColor<<Extension-1>> red
+   backgroundColor<<Enumeration>> #E6F5F7
+   backgroundColor<<Ref>> #FFFFE0
+   backgroundColor<<Pivot>> #FFFFFFF
+   backgroundColor<<Resource>> #FCF2E3
+   backgroundColor<<SubResource>> #FFFFFFF
+   backgroundColor<<SubResourceReference>> #FADADD
+   BorderColor<<Extension-2>> blue
+   FontColor<<Extension-2>> blue
+}
+legend 
+|= <size:10>Color |= <size:10>Description |
+| <#FFFFFFF> | <size:10>Sub-resource (sub-graph in current diagram) |
+| <#FCF2E3> | <size:10>Sub-resource |
+| <#E6F5F7> | <size:10>Enumeration |
+| <#red> | <size:10>removed |
+| <#FFFFE0> | <size:10>Sub-resource (reference entity) |
+| <#blue> | <size:10>added |
+
+ <size:10>(1) : Mandatory property 
+endlegend 
+skinparam legendBackgroundColor #transparent
+skinparam legendBorderColor #transparent
+@enduml

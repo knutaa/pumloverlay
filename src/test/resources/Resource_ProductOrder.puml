@@ -1,0 +1,326 @@
+@startuml
+class ProductOrderStateType <<Enumeration>> {
+   acknowledged
+   assessingCancellation
+   cancelled
+   completed
+   draft
+   failed
+   held
+   inProgress
+   inProgress.accepted
+   partial
+   pending
+   pendingCancellation
+   rejected
+}
+
+class ProductOrderJeopardyAlert<extends \nJeopardyAlert > <<Resource>> {
+   {field}//                                        //
+}
+
+class QuoteRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field}//                                        //
+}
+
+class ExternalIdentifier<extends \nExtensible > <<Resource>> {
+   externalIdentifierType : String
+   id : String
+   owner : String
+}
+
+class BillingAccountRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   ratingType : String
+}
+
+class AgreementRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field}//                                        //
+}
+
+class ProductOrderErrorMessage<extends \nErrorMessage\nExtensible > <<Resource>> {
+   timestamp : DateTime
+}
+
+class OrderPrice<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   description : String
+   name : String
+   priceType : String
+   recurringChargePeriod : String
+   unitOfMeasure : String
+}
+
+class ProductOfferingQualificationRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field}//                                        //
+}
+
+class RelatedChannel<extends \nReference\nExtensible > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   role : String
+}
+
+class ProductOrderItem<extends \nExtensible > <<SubResourceReference>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   {field} action : <color:red>ItemActionType <color:blue>OrderItemActionType (1)
+   appointment : AppointmentRef
+   billingAccount : BillingAccountRef
+   <color:red>{field} id : String (1)
+   itemPrice : OrderPrice [0..*]
+   itemTerm : OrderTerm [0..*]
+   itemTotalPrice : OrderPrice [0..*]
+   note : Note [0..*]
+   payment : PaymentRef [0..*]
+   product : ProductRefOrValue
+   productOffering : ProductOfferingRef
+   productOfferingQualificationItem : ProductOfferingQualificationItemRef
+   <color:red>productOrderItem : ProductOrderItem [1..*] [0..*]
+   productOrderItemRelationship : OrderItemRelationship [0..*]
+   qualification : ProductOfferingQualificationRef [0..*]
+   quantity : Integer
+   quoteItem : QuoteItemRef
+   state : ProductOrderItemStateType
+}
+
+class PriceAlteration<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   applicationDuration : Integer
+   description : String
+   name : String
+   <color:red>{field} priceType : String (1)
+   priority : Integer
+   recurringChargePeriod : String
+   unitOfMeasure : String
+}
+
+class ProductOfferingPriceRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field}//                                        //
+}
+
+class InitialProductOrderStateType <<Enumeration>> {
+   acknowledged
+   draft
+}
+
+class Price<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   dutyFreeAmount : Money
+   percentage : Float
+   taxIncludedAmount : Money
+   taxRate : Float
+}
+
+class Note<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   author : String
+   date : DateTime
+   id : String
+   text : String <color:blue>(1)
+}
+
+class ProductOrderMilestone<extends \nMilestone > <<Resource>> {
+   {field}//                                        //
+}
+
+class OrderRelationship<extends \nEntityRef\nExtensible > <<Resource>> {
+   @referredType : String
+   {field} id : String (1)
+   relationshipType : String
+}
+
+class PaymentRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field}//                                        //
+}
+
+class RelatedParty<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String <color:blue>(1)
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   role : String
+}
+
+class ProductOrderItemRef<extends \nExtensible > <<Resource>> {
+   @referredType : String
+   ProductOrderHref : String
+   productOrderId : String
+   productOrderItemId : String
+}
+
+class ProductOrder<extends \nEntity > <<Pivot>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   {field} cancellationDate : DateTime (1)
+   {field} cancellationReason : String (1)
+   category : String
+   {field} completionDate : DateTime (1)
+   {field} creationDate : DateTime (1)
+   description : String
+   {field} expectedCompletionDate : DateTime (1)
+   externalId : <color:blue>String
+   <color:blue>{field} href : String (1)
+   <color:blue>{field} id : String (1)
+   notificationContact : String
+   {field} orderDate : DateTime (1)
+   priority : String
+   requestedCompletionDate : DateTime
+   requestedInitialState : InitialProductOrderStateType
+   requestedStartDate : DateTime
+   {field} state : ProductOrderStateType (1)
+}
+
+ProductOrderMilestone *--> "0..*" ProductOrderItemRef : productOrderItem
+
+OrderPrice *--> "0..1" Price : price
+
+ProductOrder *--> "0..*" ProductOrderMilestone : productOrderMilestone
+
+ExternalIdentifier "<color:red>0..*" <-[#red]-*  ProductOrder : <color:red>externalId
+
+OrderPrice -left[hidden]-  ProductOrderStateType 
+
+ProductOrder *--> "0..*" RelatedChannel : channel
+
+ProductOrder *--> "0..*" RelatedParty : relatedParty
+
+OrderPrice *--> "0..*" PriceAlteration : priceAlteration
+
+PriceAlteration *-left-> "1" Price : price
+
+ProductOrderJeopardyAlert *--> "0..*" ProductOrderItemRef : productOrderItem
+
+OrderPrice *--> "0..1" ProductOfferingPriceRef : productOfferingPrice
+
+PriceAlteration *-right-> "0..1" ProductOfferingPriceRef : productOfferingPrice
+
+ProductOrder *--> "0..1" BillingAccountRef : billingAccount
+
+ProductOrderStateType -left[hidden]-  InitialProductOrderStateType 
+
+ProductOrder *--> "0..*" OrderRelationship : orderRelationship
+
+ProductOrder *-left-> "0..*" OrderPrice : orderTotalPrice
+
+OrderPrice *--> "0..1" BillingAccountRef : billingAccount
+
+ProductOrder *-right-> "1..*" ProductOrderItem : productOrderItem
+
+AgreementRef "0..*" <--*  ProductOrder : agreement
+
+BillingAccountRef -left[hidden]-  ProductOfferingPriceRef 
+
+ProductOrder *--> "0..*" ProductOrderErrorMessage : productOrderErrorMessage
+
+Note "0..*" <--*  ProductOrder : note
+
+ProductOrderErrorMessage *-right-> "0..*" ProductOrderItemRef : productOrderItem
+
+ProductOrderItem -left[hidden]-  ProductOrder 
+
+BillingAccountRef -left[hidden]-  ProductOrderStateType 
+
+PaymentRef "0..*" <--*  ProductOrder : payment
+
+ProductOrder *--> "0..*" ProductOfferingQualificationRef : productOfferingQualification
+
+ProductOrder *--> "0..*" ProductOrderJeopardyAlert : productOrderJeopardyAlert
+
+QuoteRef "0..*" <--*  ProductOrder : quote
+
+hide circle
+hide methods
+hide stereotype
+show <<Enumeration>> stereotype
+skinparam legend {
+   borderRoundCorner 0
+   borderColor red
+   backgroundColor white
+}
+skinparam class {
+   BorderColor<<Extension-1>> red
+   FontColor<<Extension-1>> red
+   backgroundColor<<Enumeration>> #E6F5F7
+   backgroundColor<<Ref>> #FFFFE0
+   backgroundColor<<Pivot>> #FFFFFFF
+   backgroundColor<<Resource>> #FCF2E3
+   backgroundColor<<SubResource>> #FFFFFFF
+   backgroundColor<<SubResourceReference>> #FADADD
+   BorderColor<<Extension-2>> blue
+   FontColor<<Extension-2>> blue
+}
+legend 
+|= <size:10>Color |= <size:10>Description |
+| <#FFFFFFF> | <size:10>Resource (entry point) |
+| <#FCF2E3> | <size:10>Sub-resource |
+| <#FADADD> | <size:10>Sub-resource with details in separate diagram |
+| <#E6F5F7> | <size:10>Enumeration |
+| <#red> | <size:10>removed |
+| <#FFFFE0> | <size:10>Sub-resource (reference entity) |
+| <#blue> | <size:10>added |
+
+ <size:10>(1) : Mandatory property 
+endlegend 
+skinparam legendBackgroundColor #transparent
+skinparam legendBorderColor #transparent
+@enduml

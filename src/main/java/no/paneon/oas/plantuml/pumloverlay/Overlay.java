@@ -22,6 +22,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import no.paneon.api.utils.Config;
 import no.paneon.oas.plantuml.g4.PlantumlLexer;
 import no.paneon.oas.plantuml.g4.PlantumlParser;
 
@@ -33,6 +35,8 @@ public class Overlay
 	
 	static final String SPACE = " ";
 	
+	static final String COLOR_MOVED = "colorMoved";
+
 	Args.Overlay args;
 	
 	public Overlay(Args.Overlay args) {
@@ -160,17 +164,29 @@ public class Overlay
 				
 				overlay.classes.get(cls).attributes.entrySet().stream().forEach(e -> {
 					String attrName = e.getKey();
+					
 					if(!baseAttributes.containsKey(attrName)) {
 						baseAttributes.put(attrName,  e.getValue());
+						
+						LOG.debug("processClasses: #1 cls={} attribute={}", cls, attrName);
+
 					} else {
-												
+										
+						LOG.debug("processClasses: #2 cls={} attribute={}", cls, attrName);
+
 						PumlAttribute baseAttribute = baseAttributes.get(attrName);
 						PumlAttribute overlayAttribute = e.getValue();
 
-						String mand=baseAttribute.mandatory+overlayAttribute.mandatory;
+						LOG.debug("processClasses: #2 cls={} color baseAttribute={}", cls, baseAttribute.attribute_color);
+						LOG.debug("processClasses: #2 cls={} color overlayAttribute={}", cls, overlayAttribute.attribute_color);
+
+						// String mand=baseAttribute.mandatory+overlayAttribute.mandatory;
+						
 //						if(!mand.isEmpty()) 
 //							Out.debug("attrName={} base_mandatory={} overlay_mandatory{}", attrName, baseAttribute.mandatory, overlayAttribute.mandatory);
 
+						baseAttribute.attribute_color = combineColor(baseAttribute.attribute_color, overlayAttribute.attribute_color);
+						
 						baseAttribute.type = combineText(baseAttribute.type, overlayAttribute.type);
 						baseAttribute.mandatory = combineText(baseAttribute.mandatory, overlayAttribute.mandatory);
 						baseAttribute.cardinality = combineText(baseAttribute.cardinality, overlayAttribute.cardinality);
@@ -196,6 +212,18 @@ public class Overlay
 								
 			}
 		}		
+	}
+
+	private String combineColor(String color1, String color2) {
+		if(color1.isEmpty() ) {
+			return color2;
+		} else if(color2.isEmpty()) {
+			return color1;
+		} else if(!color1.contentEquals(color2)) {
+			return Config.getString(COLOR_MOVED);
+		} else {
+			return color1;
+		}
 	}
 
 	private String combineText(String s1, String s2) {
@@ -323,6 +351,8 @@ public class Overlay
 
 	Puml convertToPuml(String pumlContent) {
 	    
+		LOG.debug("convertToPuML: content={}",  pumlContent);
+		
 		CharStream input = CharStreams.fromString(pumlContent);
 		
         PlantumlLexer lexer = new PlantumlLexer(input);

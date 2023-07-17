@@ -322,8 +322,11 @@ NEWPAGE : 'newpage' -> channel(HIDDEN)
 
 // NEWLINE  :  ENDLINE ; // [\r\n]+; // '\r'? '\n'; // [\r\n];
 
-IDENT : IDENT1 | (IDENT1 '.' IDENT1)+ ;
+IDENT : '"'? IDENT0 '"'?  | '""' | '""""';
+
+IDENT0 : IDENT1 | (IDENT1 '.' IDENT1)+ ;
 IDENT1 : NONDIGIT ( DIGIT | NONDIGIT )*;
+
 NUMBER : ( DIGIT )+;
 HEX : '#' ( DIGIT | NONDIGIT )+;
 

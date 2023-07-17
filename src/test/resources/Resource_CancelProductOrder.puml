@@ -1,0 +1,73 @@
+@startuml
+class ProductOrderRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field}//                                        //
+}
+
+class CancelProductOrder<extends \nEntity > <<Pivot>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   cancellationReason : String
+   {field} creationDate : DateTime (1)
+   {field} effectiveCancellationDate : DateTime (1)
+   <color:blue>{field} href : String (1)
+   <color:blue>{field} id : String (1)
+   requestedCancellationDate : DateTime
+   {field} state : TaskStateType (1)
+}
+
+class TaskStateType <<Enumeration>> {
+   accepted
+   acknowledged
+   cancelled
+   done
+   inProgress
+   rejected
+   terminatedWithError
+}
+
+CancelProductOrder -right[hidden]->  TaskStateType 
+
+CancelProductOrder *--> "1" ProductOrderRef : productOrder
+
+hide circle
+hide methods
+hide stereotype
+show <<Enumeration>> stereotype
+skinparam legend {
+   borderRoundCorner 0
+   borderColor red
+   backgroundColor white
+}
+skinparam class {
+   BorderColor<<Extension-1>> red
+   FontColor<<Extension-1>> red
+   backgroundColor<<Enumeration>> #E6F5F7
+   backgroundColor<<Ref>> #FFFFE0
+   backgroundColor<<Pivot>> #FFFFFFF
+   backgroundColor<<Resource>> #FCF2E3
+   backgroundColor<<SubResource>> #FFFFFFF
+   backgroundColor<<SubResourceReference>> #FADADD
+   BorderColor<<Extension-2>> blue
+   FontColor<<Extension-2>> blue
+}
+legend 
+|= <size:10>Color |= <size:10>Description |
+| <#FFFFFFF> | <size:10>Resource (entry point) |
+| <#FCF2E3> | <size:10>Sub-resource |
+| <#E6F5F7> | <size:10>Enumeration |
+| <#FFFFE0> | <size:10>Sub-resource (reference entity) |
+| <#blue> | <size:10>added |
+
+ <size:10>(1) : Mandatory property 
+endlegend 
+skinparam legendBackgroundColor #transparent
+skinparam legendBorderColor #transparent
+@enduml

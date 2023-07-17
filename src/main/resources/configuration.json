@@ -27,7 +27,7 @@
         
     "showSubResourceProperties": true,
     
-    "includeAsRequiredIfNotInPost": true,
+    "includeAsRequiredIfNotInPost": false,
     
     "includeDefaultMandatoryProperties": [ "href", "id", "@type" ],
     
@@ -278,6 +278,22 @@
     
     "keepInheritanceDecoractions": false,
     
-    "maxDiscriminators": 4
+    "maxDiscriminators": 4,
     
+    "getExpandException": [ "RefOrValue" ],
+    
+    "specialProperties": [ "value" ],
+    
+    "checkForResourceExamples": true,
+    
+    "includeResourcesFromRules": true,
+    
+    "xx_skipDiscriminators": [ "EntityRef" ],
+    
+    "mergeAllOfs": false,
+    
+    "minimumGraphSize": 3,
+    
+    "colorMoved": "<color:green>"
+
 }
