@@ -1,0 +1,378 @@
+@startuml
+'
+' Resource:  Service
+' Source:    TMF638-Service_Inventory_Management-v5.0.0.oas.yaml
+'
+hide circle
+hide methods
+hide stereotype
+show <<Enumeration>> stereotype
+skinparam class {
+   BorderColor<<Extension>> blue
+   FontColor<<Extension>> blue
+   backgroundColor<<Enumeration>> #E6F5F7
+   backgroundColor<<Ref>> #FFFFE0
+   backgroundColor<<Pivot>> #FFFFFFF
+   backgroundColor<<Resource>> #FCF2E3
+   backgroundColor<<SubResource>> #FFFFFFF
+   backgroundColor<<SubResourceReference>> #FADADD
+   backgroundColor<<DiscriminatorNode>> #F2F3F5
+}
+
+skinparam legend {
+   borderRoundCorner 0
+   borderColor red
+   backgroundColor white
+}
+
+class "Service"  <<Pivot>> {
+    category : String
+    description : String
+    endDate : DateTime
+    hasStarted : Boolean
+    href : String
+    id : String
+    isBundle : Boolean
+    isServiceEnabled : Boolean
+    isStateful : Boolean
+    name : String
+    operatingStatus : ServiceOperatingStatusType
+    serviceDate : String
+    serviceType : String
+    startDate : DateTime
+    startMode : String
+    state : ServiceStateType
+    @baseType : String
+    @schemaLocation : String
+    @type = Service
+}
+
+class ServiceOperatingStatusType <<Enumeration>> {
+    configured
+    running
+    stopped
+    limited
+    stopping
+    pending
+    failed
+    starting
+    degraded
+    unknown
+}
+
+class ServiceStateType <<Enumeration>> {
+    inactive
+    reserved
+    active
+    feasibilityChecked
+    designed
+    terminated
+    suspended
+}
+
+class "IntentRef"  <<Ref>> {
+    href : String
+    id : String
+    name : String
+    @baseType : String
+    @referredType : String
+    @schemaLocation : String
+    {field}@type : String (1)
+}
+
+class "ServiceSpecificationRef"  <<Ref>> {
+    href : String
+    id : String
+    name : String
+    version : String
+    @baseType : String
+    @referredType : String
+    @schemaLocation : String
+    @type = ServiceSpecificationRef
+}
+
+class "ExternalIdentifier" <<Resource>> {
+    externalIdentifierType : String
+    id : String
+    owner : String
+    @baseType : String
+    @schemaLocation : String
+    {field}@type : String (1)
+}
+
+class "Characteristic"  <<SubResourceReference>> {
+    characteristicRelationship : CharacteristicRelationship [0..*]
+    id : String
+    name : String
+    valueType : String
+    @baseType : String
+    @schemaLocation : String
+    {field}@type : String (1)
+    --
+    discriminator:
+    ObjectCharacteristic
+    NumberCharacteristic
+    BooleanArrayCharacteristic
+    Characteristic
+    NumberArrayCharacteristic
+    BooleanCharacteristic
+    ObjectArrayCharacteristic
+    IntegerCharacteristic
+    StringArrayCharacteristic
+    IntegerArrayCharacteristic
+    StringCharacteristic
+}
+
+class "ServiceRefOrValue" <<Resource>> {
+    {field}//                                        //
+    --
+    discriminator:
+    Service
+    ServiceRef
+}
+
+class "RelatedServiceOrderItem" <<Resource>> {
+    itemAction : OrderItemActionType
+    itemId : String
+    role : String
+    serviceOrderHref : String
+    serviceOrderId : String
+    @baseType : String
+    @referredType : String
+    @schemaLocation : String
+    {field}@type : String (1)
+}
+
+class OrderItemActionType <<Enumeration>> {
+    add
+    modify
+    noChange
+    delete
+}
+
+class "RelatedPartyRefOrPartyRoleRef" <<Resource>> {
+    role : String
+    @baseType : String
+    @schemaLocation : String
+    {field}@type : String (1)
+}
+
+class "FeatureRelationship" <<Resource>> {
+    id : String
+    {field}name : String (1)
+    {field}relationshipType : ENUM String (1)
+{field} //                        excluded//
+{field} //                        includes//
+{field} //                        may include//
+{field} //                        requires//
+    validFor : TimePeriod
+}
+
+class "Intent"  <<SubResourceReference>> {
+    attachment : AttachmentRefOrValue [0..*]
+    characteristic : Characteristic [0..*]
+    context : String
+    creationDate : DateTime
+    description : String
+    expression : Expression
+    href : String
+    id : String
+    intentRelationship : EntityRelationship [0..*]
+    intentSpecification : EntityRef
+    isBundle : Boolean
+    lastUpdate : DateTime
+    lifecycleStatus : String
+    name : String
+    relatedExpectation : RelatedExpectationRefOrValue [1..*]
+    relatedParty : RelatedPartyOrPartyRole [0..*]
+    statusChangeDate : DateTime
+    validFor : TimePeriod
+    version : String
+    @baseType : String
+    @schemaLocation : String
+    {field}@type : String (1)
+    --
+    discriminator:
+    IntentRefOrValue
+    Intent
+}
+
+class "RelatedEntityRefOrValue" <<Resource>> {
+    role : String
+    @baseType : String
+    @schemaLocation : String
+    {field}@type : String (1)
+}
+
+class "Feature" <<Resource>> {
+    id : String
+    isBundle : Boolean
+    isEnabled : Boolean
+    name : String
+    @baseType : String
+    @schemaLocation : String
+    {field}@type : String (1)
+}
+
+class "PlaceRefOrValue" <<Resource>> {
+    {field}//                                        //
+    --
+    discriminator:
+    GeographicAddress
+    GeographicLocation
+    GeographicSite
+    PlaceRef
+}
+
+class "IntentRefOrValue" <<Resource>> {
+    @type = IntentRefOrValue
+}
+
+class "Note" <<Resource>> {
+    author : String
+    date : DateTime
+    id : String
+    text : String
+    @baseType : String
+    @schemaLocation : String
+    {field}@type : String (1)
+}
+
+class "EntityRefOrValue"  <<SubResourceReference>> {
+    {field}//                                        //
+    --
+    discriminator:
+    PartyRef
+    Entity
+    ServiceSpecificationRef
+    OrganizationRef
+    PaymentMethodRef
+    PartyRoleSpecificationRef
+    ResourceRef
+    PlaceRef
+    RelatedExpectationRefOrValue
+    EntityRef
+    ServiceRef
+    PartyRoleRef
+}
+
+class "RelatedPlaceRefOrValue" <<Resource>> {
+    role : String
+    @baseType : String
+    @schemaLocation : String
+    {field}@type : String (1)
+}
+
+class "PartyRefOrPartyRoleRef"  <<SubResourceReference>> {
+    {field}//                                        //
+    --
+    discriminator:
+    PartyRef
+    PartyRoleRef
+}
+
+class "ResourceRef"  <<Ref>> {
+    href : String
+    id : String
+    name : String
+    @baseType : String
+    @referredType : String
+    @schemaLocation : String
+    @type = ResourceRef
+}
+
+class "ServiceRelationship" <<Resource>> {
+    relationshipType : String
+    @baseType : String
+    @schemaLocation : String
+    {field}@type : String (1)
+}
+
+class "ConstraintRef"  <<Ref>> {
+    href : String
+    id : String
+    name : String
+    version : String
+    @baseType : String
+    @referredType : String
+    @schemaLocation : String
+    {field}@type : String (1)
+}
+
+"Service" *-left-> "0..*" "ResourceRef" : "supportingResource"
+
+"ResourceRef" --|> "EntityRefOrValue"
+
+"ServiceSpecificationRef" -left-|> "EntityRefOrValue"
+
+"Service" *-->  "0..1" "ServiceSpecificationRef" : "serviceSpecification"
+
+"Service" --|> "ServiceRefOrValue"
+
+"Service" *-->  "0..*" "ServiceRefOrValue" : "supportingService"
+
+"ServiceRefOrValue" "0..1" <--* "ServiceRelationship" : "service"
+
+"ServiceRelationship" *-left-> "0..*" "Characteristic" : "serviceRelationshipCharacteristic"
+
+"Service" *-->  "0..*" "Characteristic" : "serviceCharacteristic"
+
+"EntityRefOrValue" "0..1" <--* "RelatedEntityRefOrValue" : "entity"
+
+"Service" *-->  "0..*" "RelatedEntityRefOrValue" : "relatedEntity"
+
+"Feature" *-left-> "0..*" "Characteristic" : "featureCharacteristic"
+
+"ServiceRelationship" -right[hidden]-> "Characteristic"
+
+"Service" *-->  "0..*" "Feature" : "feature"
+
+"Service" *-->  "0..*" "ServiceRelationship" : "serviceRelationship"
+
+"Service" -right[hidden]-> "ServiceOperatingStatusType"
+
+"ServiceOperatingStatusType" -right[hidden]- "ServiceStateType"
+
+"Service" *-->  "0..1" "IntentRefOrValue" : "intent"
+
+"Service" *-->  "0..*" "RelatedServiceOrderItem" : "serviceOrderItem"
+
+"Service" *-->  "0..*" "RelatedPartyRefOrPartyRoleRef" : "relatedParty"
+
+"Service" *-->  "0..*" "RelatedPlaceRefOrValue" : "place"
+
+"RelatedServiceOrderItem" -right[hidden]-> "OrderItemActionType"
+
+"ExternalIdentifier" "0..*" <--* "Service" : "externalIdentifier"
+
+"Note" "0..*" <--* "Service" : "note"
+
+"RelatedPartyRefOrPartyRoleRef" *-->  "0..1" "PartyRefOrPartyRoleRef" : "partyOrPartyRole"
+
+"RelatedPlaceRefOrValue" *-->  "0..1" "PlaceRefOrValue" : "place"
+
+"IntentRefOrValue" --|> "IntentRef"
+
+"IntentRefOrValue" --|> "Intent"
+
+"Feature" *-right-> "0..*" "FeatureRelationship" : "featureRelationship"
+
+"Feature" *-->  "0..*" "ConstraintRef" : "constraint"
+
+
+
+
+skinparam legendBackgroundColor #transparent
+skinparam legendBorderColor #transparent
+
+legend
+   |= <size:10>Color |= <size:10>Description |
+   | <#FFFFFFF> | <size:10>Resource (entry point) |
+   | <#FCF2E3> | <size:10>Sub-resource |
+   | <#FFFFE0> | <size:10>Sub-resource (reference entity) |
+   | <#FADADD> | <size:10>Sub-resource with details in separate diagram |
+   | <#E6F5F7> | <size:10>Enumeration |
+ <size:10>(1) : Mandatory property
+endlegend
+
+@enduml

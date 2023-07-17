@@ -1,0 +1,348 @@
+@startuml
+class AttachmentValue <<Resource>> <<Extension-1>> {
+   @baseType : String
+   @schemaLocation : String
+   attachmentType : String
+   content : Base64
+   description : String
+   href : String
+   id : String
+   mimeType : String
+   name : String
+   size : Quantity
+   url : String
+   validFor : TimePeriod
+}
+
+class AssociationSpecificationRef <<Ref>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String Uri
+   @type : String
+   href : String Uri
+   {field} id : String (1)
+   name : String
+}
+
+class ServiceSpecificationRef <<Resource>> {
+   <color:blue>@baseType : String
+   @referredType : String
+   <color:blue>@schemaLocation : Uri
+   <color:blue>@type : String
+   <color:blue>href : Uri
+   {field} id : String (1)
+   name : String
+   <color:blue>version : String
+}
+
+class TargetEntitySchema <<Resource>> {
+   {field} @schemaLocation : String (1)
+   {field} @type : String (1)
+}
+
+class CharacteristicSpecificationRelationship <<Resource>> {
+   @baseType : String
+   @schemaLocation : String Uri
+   @type : String
+   characteristicSpecificationId : String
+   name : String
+   parentSpecificationHref : Uri
+   parentSpecificationId : String
+   relationshipType : String
+   validFor : TimePeriod
+}
+
+class MetricDefMeasureConsequence <<Resource>> {
+   @baseType : String
+   @schemaLocation : String Uri
+   @type : String
+   description : String
+   name : String
+   prescribeAction : String
+   repeatAction : Boolean
+   validFor : TimePeriod
+}
+
+class ServiceTestSpecification <<Pivot>> {
+   @baseType : String
+   @schemaLocation : Uri
+   @type : String
+   description : String
+   href : Uri
+   id : String
+   isBundle : Boolean
+   lastUpdate : DateTime
+   lifecycleStatus : String
+   name : String
+   validFor : TimePeriod
+   version : String
+}
+
+class EntitySpecificationRelationship <<Ref>> {
+   @baseType : String
+   <color:blue>@referredType : String
+   @schemaLocation : String Uri
+   <color:blue>@type : String
+   href : String Uri
+   <color:blue>id : String
+   name : String
+   {field} relationshipType : String (1)
+   role : String
+   validFor : TimePeriod
+}
+
+class EntitySpecification <<SubResourceReference>> {
+   @baseType : String
+   @schemaLocation : String
+   @type : String
+   attachment : AttachmentRefOrValue [0..*]
+   constraint : ConstraintRef [0..*]
+   description : String
+   entitySpecRelationship : EntitySpecificationRelationship [0..*]
+   {field} href : String (1)
+   id : String
+   isBundle : Boolean
+   lastUpdate : DateTime
+   lifecycleStatus : String
+   name : String
+   relatedParty : RelatedParty [0..*]
+   specCharacteristic : CharacteristicSpecification [0..*]
+   targetEntitySchema : TargetEntitySchema
+   validFor : TimePeriod
+   version : String
+   --
+   discriminator:
+   EntitySpecification
+   ServiceTestSpecification
+}
+
+class TestMeasureDefinition <<Resource>> {
+   <color:blue>@baseType : String
+   <color:blue>@schemaLocation : Uri
+   <color:blue>@type : String
+   captureFrequency : String
+   captureMethod : String
+   capturePeriod : Duration
+   metricDescription : String
+   metricHref : String
+   metricName : String
+   name : String
+   unitOfMeasure : String
+   validFor : TimePeriod
+   valueType : String
+}
+
+class RelatedParty <<Ref>> {
+   @baseType : String
+   {field} @referredType : String (1)
+   @schemaLocation : String Uri
+   @type : String
+   href : String Uri
+   {field} id : String (1)
+   name : String
+   role : String
+}
+
+class ServiceTestSpecRelationship <<Ref>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String Uri
+   @type : String
+   href : String Uri
+   id : String
+   name : String
+   {field} relationshipType : String (1)
+   role : String
+   validFor : TimePeriod
+}
+
+class CharacteristicSpecification <<Resource>> {
+   @baseType : String
+   @schemaLocation : Uri
+   @type : String
+   @valueSchemaLocation : String
+   configurable : Boolean
+   description : String
+   extensible : Boolean
+   id : String
+   isUnique : Boolean
+   maxCardinality : Integer
+   minCardinality : Integer
+   name : String
+   regex : String
+   validFor : TimePeriod
+   valueType : String
+}
+
+class AttachmentRefOrValue <<Resource>> {
+   <color:blue>@baseType : String
+   <color:blue>@referredType : String
+   <color:blue>@schemaLocation : Uri
+   <color:blue>@type : String
+   <color:blue>attachmentType : String
+   <color:blue>content : Base64
+   <color:blue>description : String
+   <color:blue>href : Uri
+   <color:blue>id : String
+   <color:blue>mimeType : String
+   <color:blue>name : String
+   <color:blue>size : Quantity
+   <color:blue>url : Uri
+   <color:blue>validFor : TimePeriod
+   {field}//                                        //
+   --
+   discriminator:
+   Attachment
+   AttachmentRefOrValue
+   AttachmentRef
+}
+
+class MetricDefMeasureThresholdRule <<Resource>> {
+   @baseType : String
+   @schemaLocation : String Uri
+   @type : String
+   conformanceComparatorExact : Boolean
+   conformanceComparatorLower : String
+   conformanceComparatorUpper : String
+   conformanceTargetExact : String
+   conformanceTargetLower : String
+   conformanceTargetUpper : String
+   description : String
+   name : String
+   numberOfAllowedCrossing : Integer
+   thresholdRuleSeverity : String
+   tolerancePeriod : Duration
+}
+
+class CharacteristicSpecificationBase <<Resource>> {
+   @baseType : String
+   @schemaLocation : String
+   @type : String
+   @valueSchemaLocation : String
+   configurable : Boolean
+   description : String
+   extensible : Boolean
+   id : String
+   isUnique : Boolean
+   maxCardinality : Integer
+   minCardinality : Integer
+   name : String
+   regex : String
+   validFor : TimePeriod
+   valueType : String
+   --
+   discriminator:
+   CharacteristicSpecification
+   CharacteristicSpecificationBase
+}
+
+class AttachmentRef <<Ref>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   description : String
+   href : String
+   id : String
+   name : String
+   url : String
+}
+
+class ConstraintRef <<Ref>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String Uri
+   @type : String
+   href : String Uri
+   {field} id : String (1)
+   name : String
+   version : String
+}
+
+class CharacteristicValueSpecification <<Resource>> {
+   @baseType : String
+   @schemaLocation : String Uri
+   @type : String
+   isDefault : Boolean
+   rangeInterval : String
+   regex : String
+   unitOfMeasure : String
+   validFor : TimePeriod
+   value : Any
+   valueFrom : Integer
+   valueTo : Integer
+   valueType : String
+}
+
+CharacteristicSpecification *-left-> "0..*" CharacteristicSpecificationRelationship : charSpecRelationship
+
+EntitySpecificationRelationship *--> "0..1" AssociationSpecificationRef : associationSpec
+
+CharacteristicSpecificationBase <|--  CharacteristicSpecification 
+
+CharacteristicSpecification *-right-> "0..*" CharacteristicValueSpecification : characteristicValueSpecification
+
+ServiceTestSpecification *--> "0..*" CharacteristicSpecification : specCharacteristic
+
+ServiceTestSpecification *-left-> "1..* 0..*" ServiceSpecificationRef : relatedServiceSpecification
+
+MetricDefMeasureThresholdRule *--> "0..*" MetricDefMeasureConsequence : consequence
+
+ConstraintRef "0..*" <--*  ServiceTestSpecification : constraint
+
+AttachmentRefOrValue ..>  AttachmentRef 
+
+TargetEntitySchema "0..1" <--*  ServiceTestSpecification : targetEntitySchema
+
+ServiceTestSpecification *--> "0..*" AttachmentRefOrValue : attachment
+
+AttachmentRefOrValue ..>  AttachmentValue 
+
+CharacteristicSpecificationBase ..>  CharacteristicSpecification 
+
+TestMeasureDefinition *--> "0..*" MetricDefMeasureThresholdRule : thresholdRule
+
+ServiceTestSpecification *--> "0..*" EntitySpecificationRelationship : entitySpecRelationship
+
+ServiceTestSpecRelationship "0..*" <--*  ServiceTestSpecification : serviceTestSpecRelationship
+
+ServiceTestSpecification -right-|>  EntitySpecification 
+
+ServiceTestSpecification *--> "0..*" TestMeasureDefinition : testMeasureDefinition
+
+RelatedParty "0..*" <--*  ServiceTestSpecification : relatedParty
+
+hide circle
+hide methods
+hide stereotype
+show <<Enumeration>> stereotype
+skinparam legend {
+   borderRoundCorner 0
+   borderColor red
+   backgroundColor white
+}
+skinparam class {
+   BorderColor<<Extension-1>> blue
+   FontColor<<Extension-1>> blue
+   backgroundColor<<Enumeration>> #E6F5F7
+   backgroundColor<<Ref>> #FFFFE0
+   backgroundColor<<Pivot>> #FFFFFFF
+   backgroundColor<<Resource>> #FCF2E3
+   backgroundColor<<SubResource>> #FFFFFFF
+   backgroundColor<<SubResourceReference>> #FADADD
+   BorderColor<<Extension-2>> blue
+   FontColor<<Extension-2>> blue
+}
+legend 
+|= <size:10>Color |= <size:10>Description |
+| <#FFFFFFF> | <size:10>Resource (entry point) |
+| <#FCF2E3> | <size:10>Sub-resource |
+| <#FFFFE0> | <size:10>Sub-resource (reference entity) |
+| <#FADADD> | <size:10>Sub-resource with details in separate diagram |
+| <#blue> | <size:10>extension |
+| <#blue> | <size:10>5-to-4 |
+
+ <size:10>(1) : Mandatory property 
+endlegend 
+skinparam legendBackgroundColor #transparent
+skinparam legendBorderColor #transparent
+@enduml

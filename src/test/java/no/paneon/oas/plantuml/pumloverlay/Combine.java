@@ -53,11 +53,18 @@ public class Combine extends TestCase {
     	test("Resource_Service_640.puml");
     }
     
+ 
+    public void test7()
+    {
+    	test("Resource_Service.puml");
+    }
+    
     public void test6()
     {
     	test("Resource_TroubleTicketSpecification.puml");
     }
     
+
     public void test(String file)
     {
 
@@ -93,9 +100,12 @@ public class Combine extends TestCase {
 	        
 		} catch(Exception ex) {
 			System.out.println("exception: " + ex);
+			ex.printStackTrace();
 			assert(false);
 		}
 		
+		System.out.println("test: " + file + " ... done");
+
 	}
 
 }

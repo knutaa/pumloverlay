@@ -44,7 +44,7 @@ public class Batch
 		this.args = args;
 	}
 	
-    void execute() {
+    String execute() {
     	
     	try {
 	    	String tmpDirsLocation = System.getProperty("java.io.tmpdir");
@@ -113,12 +113,14 @@ public class Batch
 	        
 	    	Out.debug("... done - output to {}", args.targetDirectory);
 
+	    	return tmpdir;
 	    	
     	} catch(Exception ex) {
     		Out.printAlways("ERROR: {}", ex.getLocalizedMessage());
     		ex.printStackTrace();
     	}
     	
+    	return "";
     }
     
 	

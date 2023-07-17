@@ -44,7 +44,6 @@ public class Unit extends TestCase {
     		List<String> sorted = Sorter.sort(lines);
     		
     		Out.debug("sort_properties:: sorted={}", sorted);
-
     		
     		assert(true);
     		

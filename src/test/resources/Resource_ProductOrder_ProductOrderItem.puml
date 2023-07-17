@@ -1,0 +1,310 @@
+@startuml
+class OrderTerm<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   description : String
+   duration : <color:red>Duration <color:blue>Quantity
+   name : String
+}
+
+class QuoteItemRef<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   {field} href : String (1)
+   {field} id : String (1)
+   {field} name : String (1)
+   quoteHref : String
+   quoteId : String <color:blue>(1)
+   quoteItemId : String
+   {field} quoteName : String (1)
+}
+
+class ItemActionType <<Enumeration>> {
+   add
+   delete
+   modify
+   noChange
+}
+
+class ProductOfferingRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field}//                                        //
+}
+
+class ProductOfferingQualificationItemRef<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   {field} id : String (1)
+   itemId : String
+   productOfferingQualificationHref : String
+   productOfferingQualificationId : String <color:blue>(1)
+   productOfferingQualificationName : String
+}
+
+class BillingAccountRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   ratingType : String
+}
+
+class ProductRefOrValue <<SubResourceReference>> {
+   {field} @baseType : String (1)
+   {field} @referredType : String (1)
+   {field} @schemaLocation : String (1)
+   {field} @type : String (1)
+   agreement : AgreementItemRef [0..*]
+   {field} billingAccount : BillingAccountRef (1)
+   {field} description : String (1)
+   {field} href : String (1)
+   {field} id : String (1)
+   {field} isBundle : Boolean (1)
+   {field} isCustomerVisible : Boolean (1)
+   {field} name : String (1)
+   {field} orderDate : DateTime (1)
+   place : RelatedPlaceRefOrValue [0..*]
+   product : ProductRefOrValue [0..*]
+   productCharacteristic : Characteristic [0..*]
+   {field} productOffering : ProductOfferingRef (1)
+   productOrderItem : RelatedProductOrderItem [0..*]
+   productPrice : ProductPrice [0..*]
+   productRelationship : ProductRelationship [0..*]
+   {field} productSerialNumber : String (1)
+   {field} productSpecification : ProductSpecificationRef (1)
+   productTerm : ProductTerm [0..*]
+   {field} randomAtt : String (1)
+   realizingResource : ResourceRef [0..*]
+   realizingService : ServiceRef [0..*]
+   relatedParty : RelatedParty [0..*]
+   {field} startDate : DateTime (1)
+   {field} status : ProductStatusType (1)
+   {field} terminationDate : DateTime (1)
+   {field}//                                        //
+   --
+   discriminator:
+   Product
+   ProductRef
+}
+
+class OrderPrice<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   description : String
+   name : String
+   priceType : String
+   recurringChargePeriod : String
+   unitOfMeasure : String
+}
+
+class ProductOfferingQualificationRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field}//                                        //
+}
+
+class AppointmentRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   description : String
+   href : String
+   {field} id : String (1)
+}
+
+class ProductOrderItem<extends \nExtensible > <<SubResource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   {field} action : <color:red>ItemActionType <color:blue>OrderItemActionType (1)
+   <color:red>{field} id : String (1)
+   quantity : Integer
+   state : ProductOrderItemStateType
+}
+
+class PriceAlteration<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   applicationDuration : Integer
+   description : String
+   name : String
+   <color:red>{field} priceType : String (1)
+   priority : Integer
+   recurringChargePeriod : String
+   unitOfMeasure : String
+}
+
+class ProductOfferingPriceRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field}//                                        //
+}
+
+class ProductOrderItemStateType <<Enumeration>> {
+   acknowledged
+   assessingCancellation
+   cancelled
+   completed
+   failed
+   held
+   inProgress
+   partial
+   pending
+   pendingCancellation
+   rejected
+}
+
+class Price<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   dutyFreeAmount : Money
+   percentage : Float
+   taxIncludedAmount : Money
+   taxRate : Float
+}
+
+class Note<extends \nExtensible > <<Resource>> {
+   author : String
+   date : DateTime
+   id : String
+   text : String
+}
+
+class PaymentRef<extends \nExtensible\nEntityRef\nReference > <<Resource>> {
+   @baseType : String
+   @referredType : String
+   @schemaLocation : String
+   <color:blue>{field} @type : String (1)
+   href : String
+   {field} id : String (1)
+   name : String
+   {field}//                                        //
+}
+
+class OrderItemRelationship<extends \nExtensible > <<Resource>> {
+   @baseType : String
+   @schemaLocation : <color:blue>Uri
+   <color:blue>{field} @type : String (1)
+   id : String
+   relationshipType : String
+}
+
+class OrderItemActionType <<Enumeration>> {
+   add
+   delete
+   modify
+   noChange
+}
+
+OrderPrice *--> "0..1" Price : price
+
+ProductOrderItem *-right-> "<color:red>1..* <color:blue>0..*" ProductOrderItem : productOrderItem
+
+ProductOrderItem *--> "0..*" OrderPrice : itemPrice
+
+OrderTerm "0..*" <--*  ProductOrderItem : itemTerm
+
+ProductOrderItem *--> "0..1" AppointmentRef : appointment
+
+ProductOrderItem -right[hidden]->  ItemActionType 
+
+OrderPrice *--> "0..*" PriceAlteration : priceAlteration
+
+PriceAlteration *-right-> "1" Price : price
+
+OrderPrice *-left-> "0..1" ProductOfferingPriceRef : productOfferingPrice
+
+ProductOrderItem -right[hidden]->  ProductOrderItemStateType 
+
+ProductOfferingPriceRef "0..1" <--*  PriceAlteration : productOfferingPrice
+
+ProductOfferingQualificationItemRef "0..1" <--*  ProductOrderItem : productOfferingQualificationItem
+
+ProductRefOrValue "0..1" <--*  ProductOrderItem : product
+
+BillingAccountRef "0..1" <--*  OrderPrice : billingAccount
+
+ItemActionType -right[hidden]-  ProductOrderItemStateType 
+
+ProductOrderItem *--> "0..*" PaymentRef : payment
+
+ProductOrderItem *--> "0..*" OrderPrice : itemTotalPrice
+
+QuoteItemRef "0..1" <--*  ProductOrderItem : quoteItem
+
+Note "0..*" <--*  ProductOrderItem : note
+
+ProductOrderItem *-left-> "0..1" BillingAccountRef : billingAccount
+
+ProductOrderItem *--> "0..*" ProductOfferingQualificationRef : qualification
+
+ProductOrderItemStateType -right[hidden]-  OrderItemActionType 
+
+ProductOrderItem *--> "0..*" OrderItemRelationship : productOrderItemRelationship
+
+ProductOfferingRef "0..1" <--*  ProductOrderItem : productOffering
+
+hide circle
+hide methods
+hide stereotype
+show <<Enumeration>> stereotype
+skinparam legend {
+   borderRoundCorner 0
+   borderColor red
+   backgroundColor white
+}
+skinparam class {
+   BorderColor<<Extension-1>> red
+   FontColor<<Extension-1>> red
+   backgroundColor<<Enumeration>> #E6F5F7
+   backgroundColor<<Ref>> #FFFFE0
+   backgroundColor<<Pivot>> #FFFFFFF
+   backgroundColor<<Resource>> #FCF2E3
+   backgroundColor<<SubResource>> #FFFFFFF
+   backgroundColor<<SubResourceReference>> #FADADD
+   BorderColor<<Extension-2>> blue
+   FontColor<<Extension-2>> blue
+}
+legend 
+|= <size:10>Color |= <size:10>Description |
+| <#FFFFFFF> | <size:10>Sub-resource (sub-graph in current diagram) |
+| <#FCF2E3> | <size:10>Sub-resource |
+| <#FADADD> | <size:10>Sub-resource with details in separate diagram |
+| <#E6F5F7> | <size:10>Enumeration |
+| <#red> | <size:10>removed |
+| <#FFFFE0> | <size:10>Sub-resource (reference entity) |
+| <#blue> | <size:10>added |
+
+ <size:10>(1) : Mandatory property 
+endlegend 
+skinparam legendBackgroundColor #transparent
+skinparam legendBorderColor #transparent
+@enduml
