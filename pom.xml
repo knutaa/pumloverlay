@@ -130,10 +130,10 @@
 	 	            <configuration>
                         <sourceDirectory>${basedir}/src/main/java/no/paneon/oas/plantuml/g4</sourceDirectory>
                         <outputDirectory>${project.build.directory}/generated-sources/antlr4/no/paneon/oas/plantuml/g4</outputDirectory>
-						 <arguments>
-						       <argument>-package</argument>
-						       <argument>no.paneon.oas.plantuml.g4</argument>
-						    </arguments>
+						<arguments>
+						    <argument>-package</argument>
+					        <argument>no.paneon.oas.plantuml.g4</argument>
+						</arguments>
 	     	        </configuration>
                     <id>antlr</id>
                     <goals>

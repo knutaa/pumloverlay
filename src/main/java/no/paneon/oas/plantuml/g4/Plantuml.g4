@@ -1,5 +1,10 @@
 grammar Plantuml;
 
+/* @header {
+    package no.paneon.oas.plantuml.g4;
+}
+*/
+
 uml:
     START
     statements*
