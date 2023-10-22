@@ -104,7 +104,7 @@ public class OverlayTest extends TestCase {
 
 			// assert( content.contains("*-[#blue]-> \"0..*\" \"PaymentRef\" : <color:blue>\"payment\"" ) );
 			
-    		System.out.println("test1: tmpDir: " + tmpDir);
+    		// System.out.println("test1: tmpDir: " + tmpDir);
 
 			assert(true);
 			
@@ -140,7 +140,7 @@ public class OverlayTest extends TestCase {
 
 			// assert( content.contains("*-[#blue]-> \"0..*\" \"PaymentRef\" : <color:blue>\"payment\"" ) );
 			
-    		System.out.println("test1: tmpDir: " + tmpDir);
+    		// System.out.println("test1: tmpDir: " + tmpDir);
 
 			assert(true);
 			
