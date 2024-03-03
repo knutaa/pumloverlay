@@ -170,7 +170,7 @@ public class OverlayExtract extends TestCase {
     }
     
  
-    public String test(no.paneon.api.diagram.app.Args.ExtractExtensions argsExtension)
+    public String test(no.paneon.api.diagram.app.args.ExtractExtension argsExtension)
     {
     	
       	try {
@@ -192,10 +192,8 @@ public class OverlayExtract extends TestCase {
     {
     	
       	try {
-
-	    	no.paneon.api.diagram.app.Args args = new no.paneon.api.diagram.app.Args();
 			
-	    	no.paneon.api.diagram.app.Args.ExtractExtensions argsExtension = args.new ExtractExtensions();
+	    	no.paneon.api.diagram.app.args.ExtractExtension argsExtension = new no.paneon.api.diagram.app.args.ExtractExtension();
 	    	
 	    	argsExtension.baseSpecification = prev;
 	    	argsExtension.openAPIFile = current;
@@ -218,10 +216,8 @@ public class OverlayExtract extends TestCase {
     {
     	
       	try {
-
-	    	no.paneon.api.diagram.app.Args args = new no.paneon.api.diagram.app.Args();
 			
-	    	no.paneon.api.diagram.app.Args.ExtractExtensions argsExtension = args.new ExtractExtensions();
+	    	no.paneon.api.diagram.app.args.ExtractExtension argsExtension = new no.paneon.api.diagram.app.args.ExtractExtension();
 	    	
 	    	argsExtension.baseSpecification = prev;
 	    	argsExtension.openAPIFile = current;

@@ -16,6 +16,7 @@ import no.paneon.oas.plantuml.g4.PlantumlLexer;
 import no.paneon.oas.plantuml.g4.PlantumlParser;
 import org.springframework.core.io.ClassPathResource;
 
+
 public class Combine extends TestCase {
 
     public Combine( String testName )

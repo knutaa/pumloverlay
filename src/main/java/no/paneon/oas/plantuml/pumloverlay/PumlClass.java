@@ -121,7 +121,7 @@ public class PumlClass extends PumlFormat {
 //			.values().stream()
 //			.flatMap(List::stream)
 //			.map(map::get)
-//			.collect(Collectors.toList());
+//			.toList();
 //		
 //		LOG.debug("sort: map={}", map);
 		

@@ -1,12 +1,9 @@
 package no.paneon.oas.plantuml.pumloverlay;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -17,7 +14,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 
@@ -26,8 +22,6 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import net.sourceforge.plantuml.GeneratedImage;
-import net.sourceforge.plantuml.SourceFileReader;
 import no.paneon.api.diagram.GenerateDiagram;
 import no.paneon.api.extensions.ExtractExtensions;
 import no.paneon.api.utils.Config;
@@ -39,17 +33,19 @@ public class Batch
 	static final Logger LOG = LogManager.getLogger(Batch.class);
     
 	Args.Batch args;
+
+	private String tmpdir;
 	
 	public Batch(Args.Batch args) {
 		this.args = args;
 	}
 	
-    String execute() {
+    public String execute() {
     	
     	try {
 	    	String tmpDirsLocation = System.getProperty("java.io.tmpdir");
 	    	Path path = Paths.get(FileUtils.getTempDirectory().getAbsolutePath(), UUID.randomUUID().toString());
-	    	String tmpdir = Files.createDirectories(path).toFile().getAbsolutePath();
+	    	this.tmpdir = Files.createDirectories(path).toFile().getAbsolutePath();
 	    	
 	    	if(args.keepTempdir) {
 	    		Out.debug("... temporary directory {}",  tmpdir);
@@ -61,7 +57,7 @@ public class Batch
 	    	String removedLabel = args.removedLabel;
 	    	String removedColor = args.removedColor;
 	    	
-	    	extract_extensions(args.prev,args.current,addedLabel,addedColor,tmpdir,"current", Optional.empty());
+	    	extract_extensions(args.prev, args.current, addedLabel, addedColor, tmpdir, "current", Optional.empty());
 	    	
 	        Optional<String> subresource_config=create_subresource_config(tmpdir, tmpdir + "/current/diagrams.yaml");
 
@@ -195,6 +191,8 @@ public class Batch
 		
     	JSONObject config = Config.getConfig("overlay");
 
+    	LOG.debug("create_config config={}", config);
+
     	String expand_json=dir + "/" + file;
 
     	Utils.saveAsJson(config, expand_json);
@@ -228,7 +226,7 @@ public class Batch
     		System.exit(1);
     	}
     	
-		no.paneon.api.diagram.app.Args.ExtractExtensions  argsExtractExtensions = (new no.paneon.api.diagram.app.Args()).new ExtractExtensions();
+		no.paneon.api.diagram.app.args.ExtractExtension  argsExtractExtensions = new no.paneon.api.diagram.app.args.ExtractExtension();
 		
 		String extractConfigFilename = dir + "/" + extract_config;
 		
@@ -255,7 +253,7 @@ public class Batch
    		   		
    		Out.debug("... extract_extensions output to {}", extract_config);
 
-   		no.paneon.api.diagram.app.Args.Diagram  argsDiagram = (new no.paneon.api.diagram.app.Args()).new Diagram();
+   		no.paneon.api.diagram.app.args.Diagram  argsDiagram = new no.paneon.api.diagram.app.args.Diagram();
 		
    		argsDiagram.openAPIFile     = api;
    		argsDiagram.targetDirectory	= dir + "/" + subdir;
@@ -281,6 +279,10 @@ public class Batch
 
 		diagram.execute();
    		
+	}
+
+	public String getTempDir() {
+		return this.tmpdir;
 	}
 
 }
