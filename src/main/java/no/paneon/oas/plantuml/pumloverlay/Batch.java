@@ -79,7 +79,7 @@ public class Batch
 	        };
 	        
 	        if(this.args.generateImages) {
-	        	GenerateDiagram.generateImage(args.targetDirectory, Utils.getFiles(".puml", args.targetDirectory));
+	        	GenerateDiagram.generateImage(args.targetDirectory, Utils.getFiles(".puml", args.targetDirectory), args.imageFormat);
 	        }
 	        
 	        if(!this.args.keepTempdir) {

@@ -15,6 +15,10 @@ public class Args {
 		@Parameter(names = { "--generate-images" }, description = "Generate image of .puml files")
 		public boolean generateImages = false;
 		
+		@Parameter(names = { "--image-format" }, description = "Image format to use - legal values are puml, svg, png. Default is svg")
+		public String imageFormat = "svg";
+		
+		
 	}
 
 	public class Overlay extends Common {
