@@ -113,7 +113,7 @@ public class Batch
 	    	
     	} catch(Exception ex) {
     		Out.printAlways("ERROR: {}", ex.getLocalizedMessage());
-    		ex.printStackTrace();
+    		// ex.printStackTrace();
     	}
     	
     	return "";
